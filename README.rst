@@ -2,6 +2,7 @@ Clickable.vim
 =============
     
     Make Things Clickable : ) 
+
     -- clickable.vim
 
 :version: 0.6
