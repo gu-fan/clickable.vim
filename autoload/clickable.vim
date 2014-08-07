@@ -1,14 +1,55 @@
-" Make Things in Vim Clickable.
-" vim:tw=78:fdm=marker:
+" Make Things Clickable.
 
+" vim:tw=78:fdm=marker:
+" let b:is_loaded = exists("b:is_loaded") ? b:is_loaded : 0
+" if b:is_loaded == 0
+"     finish
+"     let b:is_loaded = 1
+" endif
 let s:is_clickable = ''
 let s:click_text = ''
 let [s:hl_row, s:hl_bgn,s:hl_end] = [0, 0 , 0]
 
-let s:link_mail = '<[[:alnum:]_-]+%(\.[[:alnum:]_-])*\@[[:alnum:]]%([[:alnum:]-]*[[:alnum:]]\.)+[[:alnum:]]%([[:alnum:]-]*[[:alnum:]])=>'
+let s:link_mail = '<[[:alnum:]_-]+%(\.[[:alnum:]_-]+)*\@[[:alnum:]]%([[:alnum:]-]*[[:alnum:]]\.)+[[:alnum:]]%([[:alnum:]-]*[[:alnum:]])=>'
 let s:link_url  = '<%(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])'
 let s:link_www  = '<www[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
+"
+" >>> echo matchstr('(fef.fef@efef.com)', '\v'.s:link_mail)
+" >>> echo matchstr('(news://aefew.eaef.cc/)', '\v'.s:link_url)
+" >>> echo matchstr('(www.test.cc/u/1?p=1&u=3)', '\v'.s:link_www)
+" fef.fef@efef.com
+" news://aefew.eaef.cc/
+" www.test.cc/u/1?p=1&u=3
 let s:link_uri  = '\v'.s:link_url .'|'. s:link_www .'|'.s:link_mail
+
+let fname_bgn = '%(^|\s|[''"([{<,;!?])'
+let fname_end = '%($|\s|[''")\]}>:.,;!?])'
+
+fun! s:norm_list(list,...) "{{{
+    " return list with words
+    return filter(map(a:list,'matchstr(v:val,''\w\+'')'), ' v:val!=""')
+endfun "}}}
+
+let s:file_ext_lst = s:norm_list(split(g:clickable_extensions,','))
+
+let s:file_ext_ptn = join(s:file_ext_lst,'|')
+
+let file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]*[[:alnum:]/\\]'
+let s:link_file  = '\v' . fname_bgn
+            \. '@<=' . file_name
+            \.'%(\.%('. s:file_ext_ptn .')|/)\ze'
+            \.fname_end 
+" >>> echo 'ajewfioaej.tta' =~ s:ext_file_link
+" >>> echo '~/test/ajewfioaej.txt' =~ s:ext_file_link
+" >>> echo 'd:/test/ajewfioaej.txt' =~ s:ext_file_link
+" >>> echo 'd:\test\ajewfioaej.txt' =~ s:ext_file_link
+" >>> echo '/tes00-t/ajewf~oaej.txt' =~ s:ext_file_link
+" 0
+" 1
+" 1
+" 1
+" 1
+
 
 fun! s:is_fold_closed() "{{{
     return foldclosed('.') != -1
@@ -23,16 +64,54 @@ fun! s:close_fold() "{{{
     exe "norm! zc"
 endfun "}}}
 
-fun! s:check_file() "{{{
-    
+fun! s:auto_mkdir(path) "{{{
+    if !isdirectory(fnamemodify(a:path,':h'))
+        call mkdir(fnamemodify(a:path,':h'),'p')
+    endif
 endfun "}}}
-fun! s:check_link() "{{{
-    
+fun! s:open_link(link) "{{{
+    call s:system(g:clickable_browser." ".a:link)
 endfun "}}}
-fun! s:in_hl_region(row, col)
-    return !&modified && a:row == s:hl_row && a:col >= s:hl_bgn && col <= s:hl_end
-endfun
+fun! s:system(expr) abort "{{{
+    if exists("*vimproc#system")
+        call vimproc#system(a:expr)
+    else
+        call system(a:expr)
+    endif
+endfun "}}}
 
+
+fun! s:open_file(file) "{{{
+    exe "edit" a:file
+endfun "}}}
+fun! s:in_hl_region(row, col) "{{{
+    return !&modified && a:row == s:hl_row && a:col >= s:hl_bgn && a:col <= s:hl_end
+endfun "}}}
+
+fun! clickable#get_WORD_bgn(line, col) "{{{
+    " Get Current WORD's idx
+    "
+    " @param 
+    " line: a string, usually is a line
+    " col: the cursor's colnum position
+    "
+    " col num start from 1 
+    " hello world
+    " 123456789
+    "
+    " @return 
+    " the match index (byte offset), start from 0
+    "
+    " >>> echo clickable#get_WORD_bgn("hello world", 2)
+    " 0
+    
+    let ptn = printf('\%%%dc.', a:col)
+    if matchstr(a:line, ptn)=~'\S'
+        return match(a:line, '\S*'.ptn)
+    else
+        return -1
+    endif
+endfun "}}}
 
 fun! s:match_object(str,ptn,...) "{{{
     " return a python like match object
@@ -54,11 +133,11 @@ fun! s:match_object(str,ptn,...) "{{{
     return s
 endfun "}}}
 
-" We will decide if one thing is clickable 
-" when moveing our cursor.
-" And will execute it's relevent action when clicked
+" Decide if one thing is clickable and highlight it
+" when moving our cursor (Cursormoved)
+" And will execute when relevent action triggered (Click)
 
-fun! clickable#hi_cursor()
+fun! clickable#hi_cursor() "{{{
     " Check if current pos is clickable.
     " Highlight it and make it clickable.
     
@@ -67,138 +146,111 @@ fun! clickable#hi_cursor()
 
     if s:is_fold_closed()
         let s:is_clickable = 'fold_closed'
+        2match none
         return
     endif
 
     if s:is_fold_firstline()
         let s:is_clickable = 'fold_firstline'
+        2match none
         return
     endif
 
-    let [text, is_link, bgn, end] = s:check_link(line, col)
-    if is_link
-        let s:is_clickable = 'link'
-        let s:click_text = text
-    else
-        let [text, is_file, bgn, end] = s:check_file(line, col)
-        if is_file
-            let s:is_clickable = 'file'
-            let s:click_text = text
-        else
-            " FUTURE: other thing here for hook
-            return
-        endif
-    endif
-
-    " Highlight section
-    
     " if cursor is still in prev hl region , skip
     if s:in_hl_region(row, col) | return | endif
 
     let [s:hl_row, s:hl_bgn,s:hl_end] = [row, 0 , 0]
-    " >>> echo s:match_object('joeifjie', 'fefe')
-    " 3
-    let obj = s:match_object(line, s:link_uri)
+    
+    " >>> let line = " this is a test of file://www.2342323.com"
+    " >>> let col = 15
+    " >>> let idx = clickable#get_WORD_bgn(line, col)
+    " >>> let obj = s:match_object(line, s:link_uri, idx)
+    " >>> echo obj.start obj.end
+    " 19 41
+    let idx = clickable#get_WORD_bgn(line, col)
+    let obj = s:match_object(line, s:link_uri, idx)
 
-endfun
+    if !empty(obj) && obj.start < col && col <= obj.end + 1
+        let s:is_clickable = 'link'
+        let s:click_text = obj.str
 
-fun! s:clickable(...) "{{{
-    " and choose action
+        let bgn = obj.start + 1
+        let end = obj.end
+        let [s:hl_row, s:hl_bgn, s:hl_end] = [row, bgn, end]
+
+
+        execute '2match' "IncSearch".' /\%'.(row)
+                    \.'l\%>'.(bgn-1) .'c\%<'.(end+1).'c/'
+        return
+    endif
+
+    " >>> let line = " this is a test file ~/tet/test.txt) joifej"
+    " >>> let col = 15
+    " >>> let idx = clickable#get_WORD_bgn(line, col)
+    " >>> let obj = s:match_object(line, s:link_file, idx)
+    " >>> echo obj.start obj.end
+    " 21 35
+    let obj = s:match_object(line, s:link_file, idx)
+    if !empty(obj) && obj.start < col && col <= obj.end + 1
+        let bgn = obj.start + 1
+        let end = obj.end
+        let [s:hl_row, s:hl_bgn, s:hl_end] = [row, bgn, end]
+        let s:click_text = obj.str
+
+        if isdirectory(s:click_text) || filereadable(s:click_text) 
+            let s:is_clickable = 'file_exists'
+            execute '2match' "IncSearch".' /\%'.(row)
+                        \.'l\%>'.(bgn-1) .'c\%<'.(end+1).'c/'
+        else
+            let s:is_clickable = 'file_nonexists'
+            execute '2match' "ErrorMsg".' /\%'.(row)
+                        \.'l\%>'.(bgn-1) .'c\%<'.(end+1).'c/'
+        endif
+        return
+    endif
+
+    let s:is_clickable = ''
+    2match none
+endfun "}}}
+
+fun! clickable#do(action) "{{{
 
     " open folding if in a folded line
-    if s:is_fold()
-        call s:open_fold() | return
+    if s:is_clickable == 'fold_closed'
+        call s:open_fold() || return
     endif
 
     " close fold if on the marker line
-    if s:is_at_first_line_of_fold()
+    if s:is_clickable == 'fold_firstline'
         call s:close_fold() | return
     endif
 
     " open link if it's a link!
-    if s:is_link()
-        call s:open_link() | return
+    if s:is_clickable == 'link'
+        call s:open_link(s:click_text) | return
     endif
 
-    if s:is_file()
-        call s:open_file() | return
-    endif
-    
-    " open file/directory if it's exists
-    let file = expand('<cfile>')
-    if !filereadable(file) || !isdirectory(file)
-        let file = expand(file)
-    endif
-
-    if filereadable(file) || isdirectory(file)
-
-        " split if "shift"
-        if a:1 =~? '^s-\|-s-'
-            echom 1
-            split
+    " Open file or Open with Ctrl
+    if s:is_clickable == 'file_exists' || ( s:is_clickable == 'file_nonexists' && a:action =~? '<c-\|-c-\|Ctrl')
+        " Split with Shift
+        if a:action =~? '<s-\|-s-\|Shift' | split | endif
+        call s:open_file(s:click_text) | return
+    elseif s:is_clickable == 'file_nonexists' && g:clickable_confirm_creation == 1
+        if input("'".s:click_text."' is not exists, create it? (yes/no):") == "yes"
+            call s:auto_mkdir(s:click_text)
+            call s:open_file(s:click_text) 
         endif
-        exe "edit ".file
         return
-    endif
+    endif 
 
+    " Nothing Clickable  Do origin Action
     " NOTE: 
     " Combine string to get string constant like "\<CR>"
     " Must use double quoting.  ~/bin/
-    exe 'exe "norm! \<'.a:1.'>"'
+    " >>> echo  substitute('[efe]', '\[\([-0-9a-zA-Z]\+\)\]','<\1>','g')
+    " <efe>
+    let action = substitute(a:action, '\[\([-0-9a-zA-Z]\+\)\]','\<\1>','g')
+    exe 'exe "norm! '.action.'"'
 
 endfun "}}}
 
-fun! clickable#hi_text() "{{{
-    
-    let [row,col] = getpos('.')[1:2]
-
-    " if col have not move out prev hl region , skip
-    if !&modified && row == s:hl_row && col >= s:hl_bgn && col <= s:hl_end
-        return
-    endif
-    let [s:hl_row, s:hl_bgn,s:hl_end] = [row, 0 , 0]
-
-    let line = getline(row)
-    let idx = s:get_link_idx(line,col)
-    
-    if idx != -1
-
-        let obj = s:match_object(line, riv#ptn#link_all(), idx)
-        if !empty(obj) && obj.start < col
-            let bgn = obj.start + 1
-            let end = obj.end
-            if col <= end+1
-                let [s:hl_row, s:hl_bgn,s:hl_end] = [row, bgn, end]
-                if !empty(obj.groups[5]) || !empty(obj.groups[6]) 
-                    if !empty(obj.groups[5]) 
-                        let file = riv#link#path(obj.str)
-                    else
-                        let file = expand(obj.str)
-                    endif
-                    " if link invalid
-                    if ( riv#path#is_directory(file) && !isdirectory(file) ) 
-                        \ ||( !riv#path#is_directory(file) && !filereadable(file) )
-                        execute '2match '.g:riv_file_link_invalid_hl.' /\%'.(row)
-                                    \.'l\%>'.(bgn-1) .'c\%<'.(end+1).'c/'
-                        return
-                    endif
-                endif
-                execute '2match' "IncSearch".' /\%'.(row)
-                            \.'l\%>'.(bgn-1) .'c\%<'.(end+1).'c/'
-                return
-            endif
-        else
-            let [is_in,bgn,end,obj] = riv#todo#col_item(line,col)
-            if is_in>=2
-                execute '2match' "DiffAdd".' /\%'.(row)
-                            \.'l\%>'.(bgn-1) .'c\%<'.(end+1).'c/'
-                return
-            endif
-        endif
-    endif
-
-    2match none
-endfun "}}}
-if expand('<sfile>:p') == expand('%:p') "{{{
-    call doctest#start()
-endif "}}}
