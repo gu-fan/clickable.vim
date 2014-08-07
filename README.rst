@@ -9,16 +9,25 @@ Clickable.vim
 
 A vim plugin to make things in vim clickable.
 
-By default, folding, links, files are clickable.
+Usage
+-----
 
-You can use ``<2-leftmouse>`` or ``<CR>`` to open these link.
+By default, folding/links/files are made clickable.
+
+You can use ``<2-leftmouse>`` or ``<CR>`` to open them.
+
+Combine with ``Shift`` and ``Control`` can also be used.
 
 Install
 -------
 
-Using Vundle or NeoBundle, as alwasy::
+Using Vundle or NeoBundle, as always:
 
-``Bundle "Rykka/clickable.vim"`` or ``NeoBundle "Rykka/clickable.vim"``
+    ``Bundle "Rykka/clickable.vim"`` 
+
+    or
+
+    ``NeoBundle "Rykka/clickable.vim"``
 
 
 Options
