@@ -18,6 +18,8 @@ By default, folding/links/files are made clickable:
     
     rykka@foxmail.com
 
+    http://127.0.0.1:3000
+
     www.google.com
 
     https://github.com/Rykka/clickable.vim/issues?q=is%3Aopen+sort%3Acreated-desc
