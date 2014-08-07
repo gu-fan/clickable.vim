@@ -9,6 +9,8 @@ Clickable.vim
 
 A vim plugin to make things in vim clickable.
 
+.. image :: http://i.imgur.com/9T91tLb.gif
+
 Usage
 -----
 
