@@ -249,7 +249,7 @@ fun! clickable#do(action) "{{{
     " Must use double quoting.  ~/bin/
     " >>> echo  substitute('[efe]', '\[\([-0-9a-zA-Z]\+\)\]','<\1>','g')
     " <efe>
-    let action = substitute(a:action, '\[\([-0-9a-zA-Z]\+\)\]','\<\1>','g')
+    let action = substitute(a:action, '\[\([-0-9a-zA-Z]\+\)\]','\\<\1>','g')
     exe 'exe "norm! '.action.'"'
 
 endfun "}}}
