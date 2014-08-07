@@ -13,8 +13,17 @@ By default, folding, links, files are clickable.
 
 You can use ``<2-leftmouse>`` or ``<CR>`` to open these link.
 
+Install
+-------
 
-**Options**
+Using Vundle or NeoBundle, as alwasy::
+
+``Bundle "Rykka/clickable.vim"`` or ``NeoBundle "Rykka/clickable.vim"``
+
+
+Options
+-------
+
 
 "g:clickable_filetypes"  
 
