@@ -5,7 +5,7 @@ Clickable.vim
 
     -- clickable.vim
 
-:version: 0.6
+:version: 0.65
 
 A vim plugin to make things in vim clickable.
 
