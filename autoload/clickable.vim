@@ -195,7 +195,7 @@ fun! clickable#hi_cursor() "{{{
         let bgn = obj.start + 1
         let end = obj.end
         let [s:hl_row, s:hl_bgn, s:hl_end] = [row, bgn, end]
-        let s:click_text = obj.str
+        let s:click_text = expand(obj.str)
 
         if isdirectory(s:click_text) || filereadable(s:click_text) 
             let s:is_clickable = 'file_exists'

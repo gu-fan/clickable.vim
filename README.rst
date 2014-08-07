@@ -12,7 +12,25 @@ A vim plugin to make things in vim clickable.
 Usage
 -----
 
-By default, folding/links/files are made clickable.
+By default, folding/links/files are made clickable:
+
+**Links:**
+    
+    rykka@foxmail.com
+
+    www.google.com
+
+    https://github.com/Rykka/clickable.vim/issues?q=is%3Aopen+sort%3Acreated-desc
+    
+**Files and Directories**
+
+    autoload/clickable.vim
+
+    ~/Documents/
+
+    /usr/lib/nodejs/http.js
+
+    
 
 You can use ``<2-leftmouse>`` or ``<CR>`` to open them.
 
