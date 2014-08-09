@@ -137,6 +137,33 @@ endfun "}}}
 " when moving our cursor (Cursormoved)
 " And will execute when relevent action triggered (Click)
 
+
+" {fold_closed: {
+"   action:  Fn(),
+"   highlight: Fn(),
+"   fallback: Fn(),
+"   trigger_ptn: Fn(),
+"   trigger_env: Fn(),
+" }
+" }
+fun! s:hi_nop()
+   2match none
+endfun
+
+let s:src = {
+        \ 'fold_closed': {
+        \   'action': function("s:open_fold"),
+        \   'highlight': function("s:hi_nop"),
+        \   'check': function("s:is_fold_closed")
+        \   },
+        \ }
+
+let s:map ={
+        \ '<C-CR>': { 
+        \ 'default': 'kJ',
+        \  },
+        \ }
+
 fun! clickable#hi_cursor() "{{{
     " Check if current pos is clickable.
     " Highlight it and make it clickable.
@@ -144,9 +171,9 @@ fun! clickable#hi_cursor() "{{{
     let [row,col] = getpos('.')[1:2]
     let line = getline(row)
 
-    if s:is_fold_closed()
+    if s:src.fold_closed.check()
         let s:is_clickable = 'fold_closed'
-        2match none
+        call s:src.fold_closed.highlight()
         return
     endif
 
@@ -217,7 +244,8 @@ fun! clickable#do(action) "{{{
 
     " open folding if in a folded line
     if s:is_clickable == 'fold_closed'
-        call s:open_fold() || return
+        call s:src.fold_closed.action()
+        return
     endif
 
     " close fold if on the marker line
@@ -227,6 +255,9 @@ fun! clickable#do(action) "{{{
 
     " open link if it's a link!
     if s:is_clickable == 'link'
+        if s:click_text =~ '\v'.s:link_mail
+            let s:click_text = 'mailto:' . s:click_text
+        endif
         call s:open_link(s:click_text) | return
     endif
 
@@ -249,7 +280,18 @@ fun! clickable#do(action) "{{{
     " Must use double quoting.  ~/bin/
     " >>> echo  substitute('[efe]', '\[\([-0-9a-zA-Z]\+\)\]','<\1>','g')
     " <efe>
-    let action = substitute(a:action, '\[\([-0-9a-zA-Z]\+\)\]','\\<\1>','g')
+    let m_action = substitute(a:action, '\[\([-0-9a-zA-Z]\+\)\]','<\1>','g')
+    if has_key(s:map, m_action) && has_key(s:map[m_action], 'default')
+        let default_act = s:map[m_action]['default']
+        if type(default_act) == 2
+            call default_act()
+            return
+        endif
+        let action = default_act
+    else
+        let action = a:action
+    endif
+    let action = substitute(action, '\[\([-0-9a-zA-Z]\+\)\]','\\<\1>','g')
     exe 'exe "norm! '.action.'"'
 
 endfun "}}}
