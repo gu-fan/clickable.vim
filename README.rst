@@ -11,6 +11,11 @@ A vim plugin to make things in vim clickable.
 
 .. image :: http://i.imgur.com/9T91tLb.gif
 
+
+**NOTE!!!**
+    Vim.org version have bugs, don't use it now.
+    (I cannot login to fix it.)
+
 Usage
 -----
 
