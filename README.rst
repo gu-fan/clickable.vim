@@ -1,7 +1,3 @@
-**NOTE!!!**
-    Vim.org version have bugs, don't use it now.
-    (I cannot login to fix it.)
-
 Clickable.vim
 =============
     
