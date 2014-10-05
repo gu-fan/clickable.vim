@@ -1,0 +1,2 @@
+
+call clickable#init()

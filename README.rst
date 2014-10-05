@@ -5,7 +5,7 @@ Clickable.vim
 
     -- clickable.vim
 
-:version: 0.66
+:version: 0.91
 
 A vim plugin to make things in vim clickable.
 
@@ -91,3 +91,12 @@ Options
     default ``"firefox"``
 
     browser for open links
+
+
+Q & A
+-----
+
+1. Not HighLight with cursor hover.
+   
+   A: The matching is using '2match', 
+   So may be conflicted with other highlighting plugins.
