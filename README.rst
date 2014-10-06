@@ -5,7 +5,7 @@ Clickable.vim
 
     -- clickable.vim
 
-:version: 0.91
+:version: 0.91 alpha
 
 
 
@@ -16,6 +16,8 @@ Clickable.vim
 :NOTE:
 
       **THIS PLUGIN HAS BEEN TOTALLY REWRITED!**
+
+      **AND IT'S IN UNSTABLE STATE!**
 
       **PLEASE HELPING ME TEST IT!**
 

@@ -449,10 +449,21 @@ fun! s:OnClick(mapping, name) "{{{
 endfun "}}}
 fun! s:InitObj(name) "{{{
     " init with autocmd to 
-    let objects = s:_ConfigQue[a:name].objects
-    for obj in objects
-        call obj.init()
-    endfor
+    let n = a:name
+    let objects = s:_ConfigQue[n].objects
+    
+    " inited ConfigQue
+    if !exists("b:clickable_init") 
+        let b:clickable_init = {}
+    endif
+
+    if !exists("b:clickable_init[n]")
+            \ || b:clickable_init[n] != 1
+        for obj in objects
+            call obj.init()
+        endfor
+        let b:clickable_init[n] = 1
+    endif
 endfun "}}}
 
 " The global [private] config queue
@@ -477,30 +488,38 @@ fun! clickable#class#ConfigQue() "{{{
         " let ConfigQue.extend = "ALL"
         
         fun! ConfigQue.init() "{{{
-            let self._mappings = split(self.mappings, ',')
-            if exists('self.filetype')
-                let self._filetype = split(self.filetype , ',')
-            endif
-            let self.objects = []
+            " if !exists("b:clickable_init") || b:clickable_init != 1
+                let self._mappings = split(self.mappings, ',')
+                if exists('self.filetype')
+                    let self._filetype = split(self.filetype , ',')
+                endif
+                let self.objects = []
+                " let b:clickable_init = 1
+            " endif
             " push self to the global config dict
             " let s:_ConfigQue[self.name] = self
         endfun "}}}
         fun! ConfigQue.load() dict "{{{
-            " echom 'load'
             " call self.init_obj()
             call self.autocmd()
             call self.mapping()
         endfun "}}}
         fun! ConfigQue.autocmd() dict "{{{
+        "  This should be load at first.
+            " call s:InitObj(self.name)
             exe "aug CLICKABLE_AUTOCMD_".self.name
                 au!
 
+
                 if self.buffer_only
 
+                    " echom self.name
+                    " echom 'au BufEnter,BufWinEnter <buffer> call s:InitObj("'.self.name.'")'
                     exe 'au BufEnter <buffer> call s:InitObj("'.self.name.'")'
                     exe 'au '. self.au_group . ' <buffer> call s:OnHover("'.self.name.'")'
-                    au! WinLeave,BufWinLeave <buffer>  2match none
+                    au! WinLeave,BufWinLeave <buffer> 2match none
                 else
+                    " echom 'au BufEnter,BufWinEnter * call s:InitObj("'.self.name.'")'
                     exe 'au BufEnter * call s:InitObj("'.self.name.'")'
                     exe 'au '. self.au_group . ' * call s:OnHover("'.self.name.'")'
                     au! WinLeave,BufWinLeave *  2match none
@@ -520,6 +539,7 @@ fun! clickable#class#ConfigQue() "{{{
             endfor
         endfun "}}}
         fun! ConfigQue.init_obj() dict "{{{
+            " echom 'init' self.name bufname('%')
             for c in self.objects
                 call c.init()
             endfor

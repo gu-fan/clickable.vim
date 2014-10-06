@@ -15,15 +15,20 @@ fun! s:syn.syn_clear() dict "{{{
 endfun "}}}
 fun! s:syn.syn_match(pattern) dict "{{{
     " Vim command wrapper
-    " echom self.name
+    " echom 'syn_init:' bufname('%') self.name 
+    " echom self.syn_group
     if empty(self.contained_in)
         " echom 1
-        exe "syn match ".self.syn_group." `". a:pattern
-                    \ ."` containedin=ALLBUT,".g:clickable_prefix.'.*'
+        " echom "syn match ".self.syn_group." `". a:pattern ."` "
+        "             \." containedin=.* "
+                    " \."containedin=ALLBUT, ".g:clickable_prefix.'.*'
+        exe "syn match ".self.syn_group." `". a:pattern ."`"
+                    \." containedin=.* "
+                    " \." containedin=ALLBUT, ".g:clickable_prefix.'.*'
     else
         " echom 2
-        exe "syn match ".self.syn_group." `". a:pattern
-                    \ ."` containedin=" . self.contained_in
+        exe "syn match ".self.syn_group." `". a:pattern ."`"
+                    \." containedin=" . self.contained_in
     endif
 endfun "}}}
 " Attach the  syn/hi to link

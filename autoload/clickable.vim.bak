@@ -41,10 +41,10 @@ let s:link_url  = '<%(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]'
 let s:link_www  = '<www[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
 "
 " >>> echo matchstr('(fef.fef@efef.com)', '\v'.s:link_mail)
-" >>> echo matchstr('(news://aefew.eaef.cc/)', '\v'.s:link_url)
+" >>> echo matchstr('(news://aefew.eaef.cc)', '\v'.s:link_url)
 " >>> echo matchstr('(www.test.cc/u/1?p=1&u=3)', '\v'.s:link_www)
 " fef.fef@efef.com
-" news://aefew.eaef.cc/
+" news://aefew.eaef.ca
 " www.test.cc/u/1?p=1&u=3
 let s:link_uri  = '\v'.s:link_url .'|'. s:link_www .'|'.s:link_mail
 

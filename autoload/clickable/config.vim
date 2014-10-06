@@ -102,7 +102,6 @@ fun! clickable#config#init() "{{{
     let local_config.file = Class(File, {
         \ 'name': 'file',
         \ 'tooltip': 'file:',
-        \ 'filetype': 'vim',
         \})
 
     " let local_config.file.filetype = 'vim'
