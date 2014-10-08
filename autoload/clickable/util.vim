@@ -2,7 +2,7 @@
 "  Plugin: Clickable
 "  File:   util.vim
 "  Author: Rykka<rykka@foxmail.com>
-"  Update: 2014-10-03
+"  Update: 2014-10-08
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -102,7 +102,7 @@ fun! clickable#util#fallback(mapping) "{{{
             exe 'exe "norm! '.k.'"'
         endif
     else
-        call clickable#util#nop(m)
+        call clickable#util#nop(a:mapping)
     endif
     
 endfun "}}}

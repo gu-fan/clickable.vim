@@ -7,12 +7,6 @@ Clickable.vim
 
 :version: 0.91 alpha
 
-
-
-
-
-
-
 :NOTE:
 
       **THIS PLUGIN HAS BEEN TOTALLY REWRITED!**
@@ -22,20 +16,9 @@ Clickable.vim
       **PLEASE HELPING ME TEST IT!**
 
 
-
-
-
-
-
-
-
-
-
 A vim plugin to make things in vim clickable.
 
 .. image :: http://i.imgur.com/9T91tLb.gif
-
-
 
 Usage
 -----

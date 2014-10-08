@@ -9,6 +9,7 @@ set cpo-=C
 
 " The Config object will load all configs 
 " from vim file and clickable_type file
+" use>
 "
 " then wrap them in a config object and push in a config queue.
 "   There are two kind of queue:
@@ -102,6 +103,7 @@ fun! clickable#config#init() "{{{
     let local_config.file = Class(File, {
         \ 'name': 'file',
         \ 'tooltip': 'file:',
+        \ 'filetype': 'vim',
         \})
 
     " let local_config.file.filetype = 'vim'

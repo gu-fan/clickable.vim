@@ -50,6 +50,10 @@ fun! clickable#test#init() "{{{
     endfor
 endfun "}}}
 
+fun! clickable#test#debug(...) "{{{
+
+endfun "}}}
+
 if expand('<sfile>:p') == expand('%:p') "{{{
         call clickable#test#init()
     let s:_r = !exists('s:_r') ? 0 : s:_r

@@ -354,6 +354,7 @@ fun! clickable#class#File() "{{{
 
         fun! File.post_validate() dict "{{{
             let self.full_path = fnamemodify(self._hl.obj.str, ':p')
+            let self.short_path = fnamemodify(self._hl.obj.str, ':t')
         endfun "}}}
         fun! File.on_hover() dict "{{{
             if !empty(self.validate())
@@ -363,7 +364,7 @@ fun! clickable#class#File() "{{{
                 else
                     call self.highlight('ErrorMsg')
                 endif
-                call self.show_tooltip(self.tooltip. self.full_path)
+                call self.show_tooltip(self.tooltip. self.short_path)
                 return 1
             else
                 return 0
@@ -378,7 +379,7 @@ fun! clickable#class#File() "{{{
                 return 0
             endif
         endfun "}}}
-        function! File.trigger(...)  dict "{{{
+        fun! File.trigger(...)  dict "{{{
             let action = get(a:000, 0 , '')
             let [_ctrl, _shift] = [0 , 0]
             if action =~? '\[c-\|-c-\|Ctrl-' | let _ctrl = 1 | endif
@@ -393,8 +394,7 @@ fun! clickable#class#File() "{{{
                     call clickable#util#edit(self.full_path)
                 endif
             endif
-        endfunction "}}}
-
+        endfun "}}}
         fun! File.is_file_exists() dict "{{{
             return isdirectory(self.full_path) || filereadable(self.full_path) 
         endfun "}}}
@@ -432,9 +432,9 @@ endfun "}}}
 fun! s:OnClick(mapping, name) "{{{
     let e = 0
     let objects = s:_ConfigQue[a:name].objects
-    if exists('s:ConfigQue[a:name].extend')
+    if has_key(s:_ConfigQue[a:name], 'extend')
         let ext = s:_ConfigQue[a:name].extend
-        call extend(objects, s:ConfigQue[ext].objects )
+        call extend(objects, s:_ConfigQue[ext].objects )
     endif
     for obj in objects
         " exe 'let e = obj.on_'.self.name.'("'.a:mapping.'")'
@@ -481,7 +481,7 @@ fun! clickable#class#ConfigQue() "{{{
 
         let ConfigQue = Class('ConfigQue')
         let ConfigQue.name = 'config_queue'
-        let ConfigQue.mappings = '<CR>,<C-CR>,<S-CR>,<C-S-CR>'
+        let ConfigQue.mappings = '<2-LeftMouse>,<C-2-LeftMouse>,<S-2-LeftMouse>,<CR>,<C-CR>,<S-CR>,<C-S-CR>'
         let ConfigQue.au_group = 'CursorMoved,CursorMovedI'
         let ConfigQue.buffer_only = 1
         " extend is the key for extending objects
@@ -493,6 +493,8 @@ fun! clickable#class#ConfigQue() "{{{
                 if exists('self.filetype')
                     let self._filetype = split(self.filetype , ',')
                 endif
+                " NOTE:
+                " Use it here to avoid duplicated list reference
                 let self.objects = []
                 " let b:clickable_init = 1
             " endif
