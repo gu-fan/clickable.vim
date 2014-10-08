@@ -9,11 +9,11 @@ Clickable.vim
 
 :NOTE:
 
-      **THIS PLUGIN HAS BEEN TOTALLY REWRITED!**
+      **This Plugin Has Been Totally Rewrited!**
 
-      **AND IT'S IN UNSTABLE STATE!**
+      **And It'S In Unstable State!**
 
-      **PLEASE HELPING ME TEST IT!**
+      **Please Helping Me Test It!**
 
 
 
