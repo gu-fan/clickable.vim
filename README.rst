@@ -13,8 +13,7 @@ Clickable.vim
 
       **And It'S In Unstable State!**
 
-      **Please Helping Me Test It!**
-
+      **Please Helping Finish it!**
 
 
 I've write an intro in my blog(Chinese): http://rykka.me/rewrite_of_clickable.vim.html
