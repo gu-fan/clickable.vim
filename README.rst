@@ -16,6 +16,24 @@ Clickable.vim
       **PLEASE HELPING ME TEST IT!**
 
 
+
+I've write an intro in my blog(Chinese): http://rykka.me/rewrite_of_clickable.vim.html
+
+Some Time are needed for further work.
+
+Or your guys can contribute to it as you like~~
+
+
+
+
+
+
+-------
+
+**OLD README**
+
+
+
 A vim plugin to make things in vim clickable.
 
 .. image :: http://i.imgur.com/9T91tLb.gif
