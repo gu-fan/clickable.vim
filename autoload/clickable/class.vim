@@ -411,27 +411,40 @@ endfun "}}}
 " then map it with the objects
 
 fun! s:OnHover(name) "{{{
-    let e = 0
-    let objects = s:_ConfigQue[a:name].objects
-    " if exists('s:ConfigQue[a:name].extend')
-    "     let ext = s:ConfigQue[a:name].extend
-    "     call extend(objects, s:ConfigQue[ext].objects )
+    " inited ConfigQue
+   
+    " buffer var to check if highlighted by any group
+    if !exists("b:clickable_hover") 
+        let b:clickable_hover = {}
+    endif
+    let n = a:name
+    let objects = copy(s:_ConfigQue[n].objects)
+    " if has_key(s:_ConfigQue[a:name], 'extend')
+    "     let ext = s:_ConfigQue[a:name].extend
+    "     call extend(objects, s:_ConfigQue[ext].objects )
     " endif
+    let b:clickable_hover[n] = 0
     for obj in objects
         " call obj.on_{self.name}()
         " exe 'let e = obj.on_'.self.name.'()'
-        let e = obj.on_hover()
-        if e == 1
+        let b:clickable_hover[n] = obj.on_hover()
+        if b:clickable_hover[n] == 1
             break
         endif
     endfor
+
+    let e = 0
+    for v in values(b:clickable_hover)
+        let e += v
+    endfor
+
     if e == 0
         call clickable#util#clear_highlight()
     endif
 endfun "}}}
 fun! s:OnClick(mapping, name) "{{{
     let e = 0
-    let objects = s:_ConfigQue[a:name].objects
+    let objects = copy(s:_ConfigQue[a:name].objects)
     if has_key(s:_ConfigQue[a:name], 'extend')
         let ext = s:_ConfigQue[a:name].extend
         call extend(objects, s:_ConfigQue[ext].objects )
@@ -450,7 +463,7 @@ endfun "}}}
 fun! s:InitObj(name) "{{{
     " init with autocmd to 
     let n = a:name
-    let objects = s:_ConfigQue[n].objects
+    let objects = copy(s:_ConfigQue[n].objects)
     
     " inited ConfigQue
     if !exists("b:clickable_init") 

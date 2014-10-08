@@ -63,8 +63,8 @@ fun! s:load_config_queue(var, ...) "{{{
         endif
     endfor
 
-    " call clickable#util#BEcho(len(s:_ConfigQue.ALL.objects))
-    " call clickable#util#BEcho(len(s:_ConfigQue.javascript.objects))
+    call clickable#util#BEcho(len(s:_ConfigQue.ALL.objects))
+    call clickable#util#BEcho(len(s:_ConfigQue.vim.objects))
 
     " return the config object
     return s:_ConfigQue
@@ -151,7 +151,8 @@ fun! clickable#config#init() "{{{
 endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{
-    call clickable#util#BEcho(clickable#config#init())
+    call clickable#config#init()
+    " call clickable#util#BEcho(clickable#config#init())
 endif "}}}
 
 let &cpo = s:cpo_save
