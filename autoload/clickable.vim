@@ -2,13 +2,72 @@
 " xxx@xxx.com ee.ee@eee.com  www.143.com eteevim xxx@xx.cim xxx.vim
 
 " www.163.com jfeoijf testtest gogogo
-"
 
 " Test {{{
 
 " }}}
+"
+"
+"
+let g:clickable_version = '0.9.1'
+let s:default = {'version': g:clickable_version}
+let s:default.options = {
+            \'browser':  'firefox',
+            \ }
+
+fun! clickable#echo(msg) "{{{
+    redraw
+    echohl Type
+    echo '[CLICK]'
+    echohl Normal
+    echon a:msg
+endfun "}}}
+fun! clickable#error(msg) "{{{
+    redraw
+    echohl ErrorMsg
+    echo '[CLICK]'
+    echohl Normal
+    echon a:msg
+endfun "}}}
+fun! clickable#warning(msg) "{{{
+    redraw
+    echohl WarningMsg
+    echo '[CLICK]'
+    echohl Normal
+    echon a:msg
+endfun "}}}
+fun! clickable#debug(msg) "{{{
+    redraw
+    if g:riv_debug
+        echohl KeyWord
+        echom "[CLICK]"
+        echohl Normal
+        echon a:msg
+    endif
+endfun "}}}
+fun! clickable#load_opt(...) "{{{
+    let opts = get(a:000, 0, s:default.options)
+    for [opt,var] in items(opts)
+        if !exists('g:clickable_'.opt)
+            let g:clickable_{opt} = var
+        elseif type(g:clickable_{opt}) != type(var)
+            call clickable#error("[CLICKABLE]: Wrong type for Option:'g:clickable_".opt."'! Use default.")
+            unlet! g:clickable_{opt}
+            let g:clickable_{opt} = var
+        endif
+        unlet! var
+    endfor
+endfun "}}}
+fun! clickable#get_opt(name) "{{{
+    return g:clickable_{a:name}
+endfun "}}}
+
 
 fun! clickable#init() "{{{
+
+
+    call clickable#load_opt()
+
     let s:_ConfigQue = clickable#config#init()
 
     call s:_ConfigQue.ALL.load()
@@ -26,3 +85,8 @@ fun! clickable#init() "{{{
     aug END
 endfun "}}}
 
+
+if expand('<sfile>:p') == expand('%:p') "{{{
+    call clickable#load_opt()
+    echo clickable#get_opt('browser')
+endif "}}}

@@ -90,7 +90,7 @@ fun! clickable#config#init() "{{{
     function! local_config.mail.trigger(...) dict "{{{
         let mail = 'mailto:'. self._hl.obj.str
         let mail = substitute(mail, '#', '@', '')
-        call clickable#util#system(self.browser.' '.mail)  
+        call clickable#util#browse(mail, self.browser)  
     endfunction "}}}
 
     let local_config.link = Class(Link, {

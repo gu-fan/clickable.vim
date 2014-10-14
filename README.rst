@@ -26,6 +26,11 @@ Or your guys can contribute to it as you like~~
 
 
 
+Currently, This project focused on implmenting not performance, so maybe a
+little bit slower.
+
+
+
 
 -------
 

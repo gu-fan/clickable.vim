@@ -331,9 +331,11 @@ fun! clickable#class#Link() "{{{
         let Syntax = clickable#class#Syntax()
         let Link = Class('Link', Syntax)
         let Link.name = 'link'
-        let Link.browser = 'firefox'
+        let Link.browser = clickable#get_opt('browser')
         function! Link.trigger(...) dict "{{{
-            call clickable#util#system(self.browser.' '.self._hl.obj.str)
+            let url = self._hl.obj.str
+            let browser = self.browser
+            call clickable#util#browse(url, browser)
         endfunction "}}}
         let s:Link = Link
     endif

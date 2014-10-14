@@ -7,6 +7,15 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
+
+let s:V = vital#of('clickable_vim')
+
+let s:File = s:V.import('System.File')
+
+
+fun! clickable#util#open(...)
+    return call(s:File.open , a:000 , s:File)
+endfun
 fun! clickable#util#edit(file) "{{{
     exe 'e ' a:file
 endfun "}}}
@@ -26,6 +35,7 @@ fun! s:system(expr) abort "{{{
         call system(a:expr)
     endif
 endfun "}}}
+
 fun! s:BEcho(Obj, ...) "{{{
     let Obj = a:Obj
     let idt = get(a:000, 0 , '')
@@ -112,7 +122,29 @@ fun! clickable#util#clear_highlight() "{{{
     redraw
 endfun "}}}
 
+fun! clickable#util#browse(url, ...) "{{{
+    if !exists("s:os")
+        if !exists("*os#init")
+            call clickable#error(" os#init is needed, please install bundle 'rykka/os.vim' ")
+        else
+            let s:os = os#init()
+        endif
+    endif
+    let url = a:url
+    let url = url =~? '\v^%(https=|file|ftp|fap|gopher|mailto|news):' ? url : 'http://'. url
+    let browser = get(a:000, 0, clickable#get_opt('browser'))
+    if s:os.is_mac
+        let browser = substitute(browser, '\<\w', '\U\0','g')
+        let cmd = 'open -a "'. browser .'"'. ' "'. url .'"'
+    else
+        let cmd = browser. ' ' . url
+    endif
+    call system(cmd)
+endfun "}}}
+
 if expand('<sfile>:p') == expand('%:p') "{{{
+    call clickable#util#open('~/Downloads/')
+    call clickable#util#browse('www.163.com')
     call clickable#util#BEcho({1:1,2:[1,2,3,[1,2,3,4]]})
 endif "}}}
 
