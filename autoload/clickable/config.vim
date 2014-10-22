@@ -129,10 +129,11 @@ fun! s:local_config()
     "             \.'%(\.%('. file_ext_ptn .')|([[:alnum:].~_-])@<=/)\ze'
     "             \.fname_end 
     "'(^|[[:punct:][:space:]])@<='
-    let local_config.file.pattern  = '\v'. '%(^|[[:space:]()''"<>!?,;])@<='
+    let local_config.file.pattern  = '\v'. '%(\w|[\//:.~_-])@<!'
                 \.file_name
-                \.'%(\.%('. file_ext_ptn .')|%(\w@<=/))'
-                \.'($|[[:punct:][:space:]])@<='
+                \.'%(\.%('. file_ext_ptn .')|%(\w@<=[/\\]))'
+                \.'%(\w|[\//:.~_-])@!'
+                " \.'%($|\s|[()''"!?,;])@<='
     " echom local_config.file.pattern
     " let local_config.file.pattern = 'tevim'
     " echo local_config.file.pattern
