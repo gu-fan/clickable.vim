@@ -96,9 +96,12 @@ fun! s:local_config()
     let local_config.link = Class(Link, {
         \ 'name': 'link',
         \ 'pattern': 
-        \ '\v<%(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])|<www[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]',
+        \ '\v<(([[:alnum:]-]+://?|www[.])[^[:space:]()<>]+%(\([[:alnum:]]+\)|([^[:punct:][:space:]]|/)))',
         \ 'tooltip': 'link:',
         \})
+        " \ '\v<%(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])|<www[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]',
+        " http://daringfireball.net/2009/11/liberal_regex_for_matching_urls
+        " \v<(([[:alnum:]-]+://?|www[.])[^[:space:]()<>]+%(\([\w\d]+\)|([^[:punct:]\s]|/)))
 
     let local_config.file = Class(File, {
         \ 'name': 'file',
@@ -112,15 +115,20 @@ fun! s:local_config()
     " FIXME:
     " the .. will match the file pattern if with '\.\s'
     " let fname_end = '%($|\s|[''")\]}>:,;!?])|\.\s'
+    " FIXME:
+    " The file pattern is tooooooo SLOW!!!
     let fname_end = '%($|\s|[''")\]}>:,;!?])'
     let file_ext_lst = clickable#pattern#norm_list(split(clickable#get_opt('extensions'),','))
     let file_ext_ptn = join(file_ext_lst,'|')
     " 
     let file_name = '%([[:alnum:]~.][/\\]|[/][[:alnum:].~_-]@<=)=%(\.=[[:alnum:]_-]+[~:./\\_-]=)*'
-    let local_config.file.pattern  = '\v' . fname_bgn
-                \. '@<=' . file_name
-                \.'%(\.%('. file_ext_ptn .')|([[:alnum:].~_-])@<=/)\ze'
-                \.fname_end 
+    " let local_config.file.pattern  = '\v' . fname_bgn
+    "             \. '@<=' . file_name
+    "             \.'%(\.%('. file_ext_ptn .')|([[:alnum:].~_-])@<=/)\ze'
+    "             \.fname_end 
+    let local_config.file.pattern  = '\v<'.file_name
+                \.'%(\.%('. file_ext_ptn .')|(\w@<=/))'
+                \.'>'
     " echom local_config.file.pattern
     " let local_config.file.pattern = 'tevim'
     " echo local_config.file.pattern
@@ -187,6 +195,10 @@ endfun "}}}
 if expand('<sfile>:p') == expand('%:p') "{{{
     call clickable#config#init()
     " call clickable#util#BEcho(clickable#config#init())
+    let regxp = '\v<(([[:alnum:]-]+://?|www[.])[^[:space:]()<>]+%(\([\w\d]+\)|([^[:punct:]\s]|/)))'
+    let link = 'www.163.com'
+    let link = 'https://16com?fefef=3&fefe=4 '
+    echo matchstr(link, regxp)
 endif "}}}
 
 let &cpo = s:cpo_save

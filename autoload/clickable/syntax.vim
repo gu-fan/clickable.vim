@@ -26,7 +26,7 @@ fun! s:syn.syn_match(pattern) dict "{{{
                     " \."containedin=ALLBUT, ".g:clickable_prefix.'.*'
 
         exe "syn match ".self.syn_group." ".s. a:pattern .s
-                    \." containedin=.* "
+                    " \." containedin=.* "
                     " \." containedin=ALLBUT, ".g:clickable_prefix.'.*'
     else
         " echom 2
