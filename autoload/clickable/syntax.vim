@@ -22,12 +22,12 @@ fun! s:syn.syn_match(pattern) dict "{{{
     if empty(self.contained_in)
         " echom 1
         " echom "syn match ".self.syn_group." `". a:pattern ."` "
-        "             \." containedin=.* "
-                    " \."containedin=ALLBUT, ".g:clickable_prefix.'.*'
+                    " \." containedin=.* "
+                    " \."containedin=ALLBUT,".g:clickable_prefix.'.*'
 
         exe "syn match ".self.syn_group." ".s. a:pattern .s
                     " \." containedin=.* "
-                    " \." containedin=ALLBUT, ".g:clickable_prefix.'.*'
+                    \." containedin=ALLBUT,".g:clickable_prefix.'.*'
     else
         " echom 2
         exe "syn match ".self.syn_group." ".s. a:pattern .s

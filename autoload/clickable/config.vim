@@ -111,7 +111,7 @@ fun! s:local_config()
     " let local_config.file.filetype = 'vim'
 
 
-    let fname_bgn = '%(^|\s|[''"([{<,;!?])'
+    let fname_bgn = '%(^|[[:space:]''"([{<,;!?])'
     " FIXME:
     " the .. will match the file pattern if with '\.\s'
     " let fname_end = '%($|\s|[''")\]}>:,;!?])|\.\s'
@@ -121,14 +121,18 @@ fun! s:local_config()
     let file_ext_lst = clickable#pattern#norm_list(split(clickable#get_opt('extensions'),','))
     let file_ext_ptn = join(file_ext_lst,'|')
     " 
-    let file_name = '%([[:alnum:]~.][/\\]|[/][[:alnum:].~_-]@<=)=%(\.=[[:alnum:]_-]+[~:./\\_-]=)*'
+    " let file_name = '%([[:alnum:]~.][/\\]|[/][[:alnum:].~_-]@<=)=%(\.=[[:alnum:]_-]+[~:./\\_-]=)*'
+    " let file_name = '%([[:alnum:]~.][/\\]|[/][[:alnum:].~_-]@<=)=%(\.=[~[:alnum:]_-]+[~:./\\_-]=)*'
+    let file_name = '%([~]=/|\w:\\)=%(\.=[~[:alnum:]_-]+[~:./\\_-]=)*'
     " let local_config.file.pattern  = '\v' . fname_bgn
     "             \. '@<=' . file_name
     "             \.'%(\.%('. file_ext_ptn .')|([[:alnum:].~_-])@<=/)\ze'
     "             \.fname_end 
-    let local_config.file.pattern  = '\v<'.file_name
-                \.'%(\.%('. file_ext_ptn .')|(\w@<=/))'
-                \.'>'
+    "'(^|[[:punct:][:space:]])@<='
+    let local_config.file.pattern  = '\v'. '%(^|[[:space:]()''"<>!?,;])@<='
+                \.file_name
+                \.'%(\.%('. file_ext_ptn .')|%(\w@<=/))'
+                \.'($|[[:punct:][:space:]])@<='
     " echom local_config.file.pattern
     " let local_config.file.pattern = 'tevim'
     " echo local_config.file.pattern
