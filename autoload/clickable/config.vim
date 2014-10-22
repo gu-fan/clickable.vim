@@ -26,15 +26,15 @@ set cpo-=C
 
 fun! s:init_config_queue() "{{{
     " Create A Config Class
-    let Class = clickable#class#Class()
+    let Class = clickable#class#init()
     " let Config = Class('Config',{'FileType':{}, 'All':[] })
 
     let g:_clickable_config_queue = {}
     let s:_ConfigQue = g:_clickable_config_queue
-    let ConfigQue = clickable#class#ConfigQue()
+    let ConfigQue = clickable#class#config_queue#init()
     let s:_ConfigQue.ALL = ConfigQue.new({'name': 'ALL', 'buffer_only':0})
 
-    
+
 endfun "}}}
 fun! s:load_config_queue(var, ...) "{{{
     " Load Config from local Var, 
@@ -46,7 +46,7 @@ fun! s:load_config_queue(var, ...) "{{{
     let configs = a:var
     " let namespace = get(a:000, 0 , 'clickable')
     
-    let ConfigQue = clickable#class#ConfigQue()
+    let ConfigQue = clickable#class#config_queue#init()
     
     " Create A config Instance
     " have config instance
@@ -74,12 +74,11 @@ endfun "}}}
 
 
 fun! s:local_config()
-    let Class = clickable#class#Class()
-    let Basic = clickable#class#Basic()
-    let File = clickable#class#File()
-    let Link = clickable#class#Link()
+    let Class = clickable#class#init()
+    let Basic = clickable#class#basic#init()
+    let File = clickable#class#file#init()
+    let Link = clickable#class#link#init()
 
-    " let Config = clickable#class#Config()
     let local_config = {}
 
     let local_config.mail = Class('Mail',Link, {
