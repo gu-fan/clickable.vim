@@ -86,6 +86,8 @@ Using Vundle or NeoBundle, as always:
     ``NeoBundle "Rykka/clickable.vim"``
 
 
+Also 'rykka/os.vim'
+
 Options
 -------
 

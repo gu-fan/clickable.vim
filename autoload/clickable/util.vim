@@ -131,13 +131,13 @@ fun! clickable#util#browse(url, ...) "{{{
         endif
     endif
     let url = a:url
-    let url = url =~? '\v^%(https=|file|ftp|fap|gopher|mailto|news):' ? url : 'http://'. url
+    " let url = url =~? '\v^%(https=|file|ftp|fap|gopher|mailto|news):' ? url : 'http://'. url
     let browser = get(a:000, 0, clickable#get_opt('browser'))
     if s:os.is_mac
         let browser = substitute(browser, '\<\w', '\U\0','g')
-        let cmd = 'open -a "'. browser .'"'. ' "'. url .'"'
+        let cmd = 'open -a "'. browser .'"'. ' "'. url .'" &'
     else
-        let cmd = browser. ' ' . url
+        let cmd = browser. ' ' . url. ' &'
     endif
     call system(cmd)
 endfun "}}}

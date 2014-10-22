@@ -1,8 +1,13 @@
-" www.163.com
-"
+
+" Loaded once
+" echom 'clickable init'
 call clickable#init()
-
-
+" if ( !exists('b:clickable_loaded') || b:clickable_loaded != 1 ) 
+"     if bufname('%') !~ clickable#get_opt('ignored_buf')
+"         call clickable#init()
+"     endif
+"     let b:clickable_loaded = 1
+" endif
 
 " SYNTAX LOADING TEST
 "

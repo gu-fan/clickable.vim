@@ -23,56 +23,57 @@ set cpo-=C
 " Then highlight/hover/click/navigate events will be added
 " and be triggered at the right time.
 
-let g:clickable_prefix = '_clickable_'
-let g:clickable_extensions = 'txt,js,css,html,py,vim,java,jade,c,cpp'
 
-fun! s:load_config_queue(var, ...) "{{{
-    " Load Config from local Var, 
-    " And optionally 
-    "   local file
-    "   remote file
-    
+fun! s:init_config_queue() "{{{
     " Create A Config Class
     let Class = clickable#class#Class()
     " let Config = Class('Config',{'FileType':{}, 'All':[] })
 
     let g:_clickable_config_queue = {}
     let s:_ConfigQue = g:_clickable_config_queue
+    let ConfigQue = clickable#class#ConfigQue()
+    let s:_ConfigQue.ALL = ConfigQue.new({'name': 'ALL', 'buffer_only':0})
 
+    
+endfun "}}}
+fun! s:load_config_queue(var, ...) "{{{
+    " Load Config from local Var, 
+    " And optionally 
+    "   local file
+    "   remote file
+    
+    " Load All Configs
+    let configs = a:var
+    " let namespace = get(a:000, 0 , 'clickable')
+    
     let ConfigQue = clickable#class#ConfigQue()
     
     " Create A config Instance
     " have config instance
     " let config = {}
     " let config.ALL = Config.new({'name': 'ALL'})
-    let s:_ConfigQue.ALL = ConfigQue.new({'name': 'ALL', 'buffer_only':0})
-    " Load All Configs
-    let all_configs = a:var
-    
     " put config into FileType queue and All queue.
-    for key in keys(all_configs)
-        if has_key(all_configs[key], 'filetype')
-            for ft in split(all_configs[key]['filetype'],',')
+    for key in keys(configs)
+        if has_key(configs[key], 'filetype')
+            for ft in split(configs[key]['filetype'],',')
                 if !exists("s:_ConfigQue[ft]")
                     let s:_ConfigQue[ft] = ConfigQue.new({'name':ft, 'extend':'ALL'})
                 endif
-                call add(s:_ConfigQue[ft].objects, all_configs[key])
+                " let configs[key].namespace = namespace
+                call add(s:_ConfigQue[ft].objects, configs[key])
             endfor
         else
-            call add(s:_ConfigQue.ALL.objects, all_configs[key])
+                " let configs[key].namespace = namespace
+            call add(s:_ConfigQue.ALL.objects, configs[key])
         endif
     endfor
-
-    call clickable#util#BEcho(len(s:_ConfigQue.ALL.objects))
-    call clickable#util#BEcho(len(s:_ConfigQue.vim.objects))
 
     " return the config object
     return s:_ConfigQue
 endfun "}}}
 
-fun! clickable#config#init() "{{{
 
-
+fun! s:local_config()
     let Class = clickable#class#Class()
     let Basic = clickable#class#Basic()
     let File = clickable#class#File()
@@ -103,22 +104,25 @@ fun! clickable#config#init() "{{{
     let local_config.file = Class(File, {
         \ 'name': 'file',
         \ 'tooltip': 'file:',
-        \ 'filetype': 'vim',
         \})
 
     " let local_config.file.filetype = 'vim'
 
 
     let fname_bgn = '%(^|\s|[''"([{<,;!?])'
-    let fname_end = '%($|\s|[''")\]}>:.,;!?])'
-    let file_ext_lst = clickable#pattern#norm_list(split(g:clickable_extensions,','))
+    " FIXME:
+    " the .. will match the file pattern if with '\.\s'
+    " let fname_end = '%($|\s|[''")\]}>:,;!?])|\.\s'
+    let fname_end = '%($|\s|[''")\]}>:,;!?])'
+    let file_ext_lst = clickable#pattern#norm_list(split(clickable#get_opt('extensions'),','))
     let file_ext_ptn = join(file_ext_lst,'|')
-
-    let file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]*[[:alnum:]/\\]'
+    " 
+    let file_name = '%([[:alnum:]~.][/\\]|[/][[:alnum:].~_-]@<=)=%(\.=[[:alnum:]_-]+[~:./\\_-]=)*'
     let local_config.file.pattern  = '\v' . fname_bgn
                 \. '@<=' . file_name
-                \.'%(\.%('. file_ext_ptn .')|/)\ze'
+                \.'%(\.%('. file_ext_ptn .')|([[:alnum:].~_-])@<=/)\ze'
                 \.fname_end 
+    " echom local_config.file.pattern
     " let local_config.file.pattern = 'tevim'
     " echo local_config.file.pattern
     " echo '12312' =~ local_config.file.pattern
@@ -146,8 +150,39 @@ fun! clickable#config#init() "{{{
     function! local_config.fold_marker.trigger(...) dict "{{{
         exe "norm! zc"
     endfunction "}}}
+    
+    return local_config
+endfun
 
-    return s:load_config_queue(local_config)
+fun! s:load_file_config() "{{{
+
+    let files = split(globpath(clickable#get_opt("directory"), '*.vim'),'\n')
+    let files += split(globpath(&rtp, 'clickable/*.vim'),'\n')
+
+    for file in files
+        exe 'so ' file
+    endfor
+
+    let config_queue = clickable#get_file_queue()
+    for config in config_queue
+        call s:load_config_queue(config)
+    endfor
+    
+endfun "}}}
+
+fun! clickable#config#init() "{{{
+
+    " We should add namespace to avoid override of same key
+
+    call s:init_config_queue()
+
+
+    call s:load_config_queue(s:local_config())
+
+    call s:load_file_config()
+
+    return s:_ConfigQue
+    
 endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{

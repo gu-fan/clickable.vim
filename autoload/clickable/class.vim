@@ -133,10 +133,7 @@ fun! clickable#class#Basic() "{{{
 
         fun! Basic.show_tooltip(tooltip) dict "{{{
             " Show Tooltip in cmdline
-            echohl ModeMsg
-            echon '[CLICKABLE]'
-            echohl Normal
-            echon ' '. a:tooltip
+            call clickable#echo(a:tooltip)
         endfun "}}}
 
         let s:Basic = Basic
@@ -164,7 +161,7 @@ fun! clickable#class#Syntax() "{{{
         " let Syntax.initialized = 0
 
         fun! Syntax.init() dict "{{{
-                let self.syn_group = g:clickable_prefix . self.name
+                let self.syn_group = clickable#get_opt('prefix') . self.name
                 let self._hl = { 'row':0,'bgn':0,'end':0, 'col':0, 'buf':bufnr('%'),
                                 \ 'obj':{} }
                 let self._changedtick = b:changedtick
@@ -199,7 +196,7 @@ fun! clickable#class#Syntax() "{{{
                 let _i = 0
                 for s in _stack
                     let name = synIDattr(s, 'name')
-                    if name =~ '^'.g:clickable_prefix
+                    if name =~ '^'.clickable#get_opt('prefix')
                         let _i = 1
                         break
                     endif
@@ -335,11 +332,11 @@ fun! clickable#class#Link() "{{{
         function! Link.trigger(...) dict "{{{
             let url = self._hl.obj.str
             let browser = self.browser
+            let url = url =~? '\v^%(https=|file|ftp|fap|gopher|mailto|news):' ? url : 'http://'. url
             call clickable#util#browse(url, browser)
         endfunction "}}}
         let s:Link = Link
     endif
-
     return s:Link
 endfun "}}}
 fun! clickable#class#File() "{{{
@@ -366,7 +363,7 @@ fun! clickable#class#File() "{{{
                 else
                     call self.highlight('ErrorMsg')
                 endif
-                call self.show_tooltip(self.tooltip. self.short_path)
+                call self.show_tooltip(self.tooltip. self.full_path)
                 return 1
             else
                 return 0
@@ -406,8 +403,6 @@ fun! clickable#class#File() "{{{
 
     return s:File
 endfun "}}}
-
-
 
 " The global function, with name as the key of object
 " then map it with the objects

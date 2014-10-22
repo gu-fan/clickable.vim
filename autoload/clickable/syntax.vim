@@ -17,17 +17,20 @@ fun! s:syn.syn_match(pattern) dict "{{{
     " Vim command wrapper
     " echom 'syn_init:' bufname('%') self.name 
     " echom self.syn_group
+    " NOTE: Syntax seperator for wrapping syntax pattern.
+    let s = exists("self.syn_sep") ? self.syn_sep : '`'
     if empty(self.contained_in)
         " echom 1
         " echom "syn match ".self.syn_group." `". a:pattern ."` "
         "             \." containedin=.* "
                     " \."containedin=ALLBUT, ".g:clickable_prefix.'.*'
-        exe "syn match ".self.syn_group." `". a:pattern ."`"
+
+        exe "syn match ".self.syn_group." ".s. a:pattern .s
                     \." containedin=.* "
                     " \." containedin=ALLBUT, ".g:clickable_prefix.'.*'
     else
         " echom 2
-        exe "syn match ".self.syn_group." `". a:pattern ."`"
+        exe "syn match ".self.syn_group." ".s. a:pattern .s
                     \." containedin=" . self.contained_in
     endif
 endfun "}}}
