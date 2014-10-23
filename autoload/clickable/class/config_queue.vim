@@ -93,7 +93,7 @@ fun! clickable#class#config_queue#init() "{{{
 
         let ConfigQue = Class('ConfigQue')
         let ConfigQue.name = 'config_queue'
-        let ConfigQue.mappings = '<2-LeftMouse>,<C-2-LeftMouse>,<S-2-LeftMouse>,<CR>,<C-CR>,<S-CR>,<C-S-CR>'
+        let ConfigQue.mappings = clickable#get_opt('maps')
         let ConfigQue.au_group = 'CursorMoved,CursorMovedI'
         let ConfigQue.buffer_only = 1
         " extend is the key for extending objects
