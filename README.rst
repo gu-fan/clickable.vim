@@ -198,17 +198,20 @@ and when you click on it, it will echo 'hello'.
         " pattern for string matching
         \ 'pattern': 'test',
 
+        " only valid when filetype is vim
+        \ 'filetype': 'vim',
+
         " tooltip when showing
         \ 'tooltip': 'test:',
 
         " syntax group name for highlighting. will be prefixed
         \ 'syn_group': 'test',
 
-        " syntax pattern seperator used for define pattern.
-        " should not be duplicated with symbol used inside pattern.
+        " syntax pattern seperator used for define pattern
+        " should not be duplicated with symbol used inside pattern
         \ 'syn_sep': '`',
 
-        " Highlight group name. The basic syntax highlighting.
+        " Highlight group name. The basic syntax highlighting
         \ 'hl_group': 'Underlined',
 
         " Highlight group for hover.
