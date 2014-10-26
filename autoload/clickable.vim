@@ -15,9 +15,9 @@ let s:default.options = {
             \'browser':  'firefox',
             \'directory':  '',
             \'extensions': 'txt,js,css,html,py,vim,java,jade,c,cpp,rst,php,rb',
-            \ 'prefix': '_clickable_',
-            \ 'ignored_buf': '^NERD',
-            \ 'maps': '<2-LeftMouse>,<C-2-LeftMouse>,<S-2-LeftMouse>,<CR>,<C-CR>,<S-CR>,<C-S-CR>'
+            \'prefix': '_clickable_',
+            \'ignored_buf': '^NERD',
+            \'maps': '<2-LeftMouse>,<C-2-LeftMouse>,<S-2-LeftMouse>,<CR>,<C-CR>,<S-CR>,<C-S-CR>'
             \ }
 
 fun! s:trim(t) "{{{
@@ -79,6 +79,7 @@ fun! clickable#get_opt(name) "{{{
 endfun "}}}
 
 let s:opt_loaded = 0
+
 fun! clickable#init() "{{{
 
     if !s:opt_loaded 

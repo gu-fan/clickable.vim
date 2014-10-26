@@ -85,6 +85,7 @@ fun! s:local_config()
         \ 'name': 'mail',
         \ 'pattern': '\v<[[:alnum:]_-]+%(\.[[:alnum:]_-]+)*[@#][[:alnum:]]%([[:alnum:]-]*[[:alnum:]]\.)+[[:alnum:]]%([[:alnum:]-]*[[:alnum:]])=>',
         \ 'tooltip': 'mail:',
+
         \})
 
     function! local_config.mail.trigger(...) dict "{{{

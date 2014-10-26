@@ -9,40 +9,59 @@ set cpo-=C
 
 " The global function, with name as the key of object
 " then map it with the objects
-
+fun! s:total(obj)
+    let e = 0
+    for v in values(a:obj)
+        let e += v
+    endfor
+    return e 
+endfun
 fun! s:OnHover(name) "{{{
     " inited ConfigQue
    
+    if bufname('%') =~ clickable#get_opt('ignored_buf')
+        return
+    endif
+
     " buffer var to check if highlighted by any group
     if !exists("b:clickable_hover") 
         let b:clickable_hover = {}
     endif
-    let n = a:name
-    let objects = copy(s:_ConfigQue[n].objects)
-    " if has_key(s:_ConfigQue[a:name], 'extend')
-    "     let ext = s:_ConfigQue[a:name].extend
-    "     call extend(objects, s:_ConfigQue[ext].objects )
-    " endif
-    let b:clickable_hover[n] = 0
-    for obj in objects
-        " call obj.on_{self.name}()
-        " exe 'let e = obj.on_'.self.name.'()'
-        let b:clickable_hover[n] = obj.on_hover()
-        if b:clickable_hover[n] == 1
-            break
-        endif
-    endfor
 
-    let e = 0
-    for v in values(b:clickable_hover)
-        let e += v
-    endfor
+
+    let n = a:name
+
+
+    let objects = copy(s:_ConfigQue[n].objects)
+    
+
+    let b:clickable_hover[n] = 0
+
+    let e = s:total(b:clickable_hover)
+
+    if e == 0 
+        for obj in objects
+            " If highlight by one function, then stop.
+            let b:clickable_hover[n] = obj.on_hover()
+            if b:clickable_hover[n] == 1
+                break
+            endif
+        endfor
+    endif
+
+    let e = s:total(b:clickable_hover)
 
     if e == 0
         call clickable#util#clear_highlight()
     endif
+
 endfun "}}}
 fun! s:OnClick(mapping, name) "{{{
+
+    if bufname('%') =~ clickable#get_opt('ignored_buf')
+        return
+    endif
+
     let e = 0
     let objects = copy(s:_ConfigQue[a:name].objects)
     if has_key(s:_ConfigQue[a:name], 'extend')
@@ -62,6 +81,12 @@ fun! s:OnClick(mapping, name) "{{{
 endfun "}}}
 fun! s:InitObj(name) "{{{
     " init with autocmd to 
+
+    
+    if bufname('%') =~ clickable#get_opt('ignored_buf')
+        return
+    endif
+
     let n = a:name
     let objects = copy(s:_ConfigQue[n].objects)
     
@@ -122,8 +147,6 @@ fun! clickable#class#config_queue#init() "{{{
         "  This should be load at first.
             " call s:InitObj(self.name)
             exe "aug CLICKABLE_AUTOCMD_".self.name
-                au!
-
 
                 if self.buffer_only
 
@@ -133,6 +156,7 @@ fun! clickable#class#config_queue#init() "{{{
                     exe 'au '. self.au_group . ' <buffer> call s:OnHover("'.self.name.'")'
                     au! WinLeave,BufWinLeave <buffer> 2match none
                 else
+                    au!
                     " echom 'au BufEnter,BufWinEnter * call s:InitObj("'.self.name.'")'
                     exe 'au BufEnter * call s:InitObj("'.self.name.'")'
                     exe 'au '. self.au_group . ' * call s:OnHover("'.self.name.'")'

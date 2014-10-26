@@ -5,37 +5,27 @@ Clickable.vim
 
     -- clickable.vim
 
-:version: 0.91 alpha
-
-:NOTE:
-
-      **This Plugin Has Been Totally Rewrited!**
-
-      **And It'S In Unstable State!**
-
-      **Please Helping Finish it!**
+:version: 0.91 beta
 
 
-I've write an intro in my blog(Chinese): http://rykka.me/rewrite_of_clickable.vim.html
+What's New in 0.91
+------------------
 
-Some Time are needed for further work.
+I've rewrite the clickable.vim to make it more scalable.
 
-Or your guys can contribute to it as you like~~
-
-
-
-
+There is an intro in my blog(Chinese): http://rykka.me/rewrite_of_clickable.vim.html
 
 Currently, This project focused on implmenting not performance, so maybe a
 little bit slower.
 
 
+**Options:**
+
+options should be prefixed with `g:clickable_`.
+e.g. `g:clickalbe_browser`
 
 
 -------
-
-**OLD README**
-
 
 
 A vim plugin to make things in vim clickable.
@@ -50,6 +40,9 @@ By default, folding/links/files are made clickable:
 **Links:**
     
     rykka@foxmail.com
+
+    NOTE: there is a known issus here. The 'Google Chrome' under 
+    Mac OSX wil not open this as mail. But 'Firefox' works fine.
 
     http://127.0.0.1:3000
 
@@ -80,48 +73,55 @@ Install
 Using Vundle or NeoBundle, as always:
 
     ``Bundle "Rykka/clickable.vim"`` 
+    ``Bundle "Rykka/os.vim"`` 
 
     or
 
     ``NeoBundle "Rykka/clickable.vim"``
+    ``NeoBundle "Rykka/os.vim"`` 
 
 
-Also 'rykka/os.vim'
 
 Options
 -------
 
+'browser':  'firefox'
+    The default url browser.
+ 
 
-"g:clickable_filetypes"  
+'extensions': 'txt,js,css,html,py,vim,java,jade,c,cpp,rst,php,rb',
+    The string with such extension will be considered as file pattern.
 
-    default: ``'txt,javascript,css,html,py,vim,java,jade,c,cpp'``
 
-    The buffer of these filetype will have clickable links
+'ignored_buf': '^NERD',
+    Clickable Ignored  buffer.
 
-"g:clickable_extensions" 
+'maps': '<2-LeftMouse>,<C-2-LeftMouse>,<S-2-LeftMouse>,<CR>,<C-CR>,<S-CR>,<C-S-CR>'
+    The mapping to trigger clickable.
 
-    default: ``'txt,js,css,html,py,vim,java,jade,c,cpp'``
+'map_fallback': {'<C-CR>':'kJ'}
+    the `map_fallback` option is used for default action
+    for a mapping, when it's not triggered by the event.
 
-    File link of these extenstions will be clickable
+    it can be a function object.  see ':h funcref'.
 
-"g:clickable_maps"   
+'directory':  ''
 
-    default: ``"<2-leftmouse>,<CR>,<S-CR>,<C-CR>,<C-2-leftmouse>,<s-2-leftmouse>,gn"``
+    The 'clickable' plugin  directory.
 
-    The mapping to trigger clickable
+Defining clickable plugins
+--------------------------
 
-"g:clickable_confirm_creation" 
 
-    default ``1``
+Along with the `g:clickable_directory` directory, clickable.vim will search all vim file under '&rtp/clickable' and
+source them.
 
-    When file is nonexists, confirm for creation, When using Ctrl,
-    This will be ignored.
+These vim file must use  `clickable#export(object)` to export config object
+to clickable plugin.
 
-"g:clickable_browser" 
+you can check 'riv.vim/clickable' for a detail view.
 
-    default ``"firefox"``
 
-    browser for open links
 
 
 Q & A

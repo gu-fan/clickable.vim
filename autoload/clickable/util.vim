@@ -89,11 +89,6 @@ fun! clickable#util#nop(mapping) "{{{
     exe 'exe "norm! '.action.'"'
 endfun "}}}
 
-function! MAP_SCR()
-    echo 3
-    echo 4
-endfunction
-let g:clickable_map_fallback = {'<C-CR>': 'kJ', '<S-CR>': function('MAP_SCR')}
 fun! clickable#util#fallback(mapping) "{{{
     let m = a:mapping
     let m = substitute(m,
@@ -139,6 +134,7 @@ fun! clickable#util#browse(url, ...) "{{{
     else
         let cmd = browser. ' ' . url. ' &'
     endif
+    echom cmd 
     call system(cmd)
 endfun "}}}
 
