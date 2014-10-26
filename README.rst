@@ -114,7 +114,7 @@ e.g. `g:clickalbe_browser`
 Defining clickable plugins
 --------------------------
 
-
+For now, you can defining clickable plugin with your need.
 
 Along with the `g:clickable_directory` directory,
 clickable.vim will search all vim file under '&rtp/clickable' and source them.
