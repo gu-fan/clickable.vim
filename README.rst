@@ -101,7 +101,7 @@ e.g. `g:clickalbe_browser`
 
 'map_fallback': {'<C-CR>':'kJ'}
     The `map_fallback` option is used for default action
-    for a mapping, when it's not triggered by the event.
+    for a mapping, when it's not triggering anything.
 
     When it's a string, it will be trigger as a mapping.
 
