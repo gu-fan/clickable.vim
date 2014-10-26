@@ -7,6 +7,9 @@ Clickable.vim
 
 :version: 0.91 beta
 
+A vim plugin to make things in vim clickable.
+
+.. image :: http://i.imgur.com/9T91tLb.gif
 
 What's New in 0.91
 ------------------
@@ -18,19 +21,9 @@ There is an intro in my blog(Chinese): http://rykka.me/rewrite_of_clickable.vim.
 Currently, This project focused on implmenting not performance, so maybe a
 little bit slower.
 
-
-**Options:**
-
-options should be prefixed with `g:clickable_`.
-e.g. `g:clickalbe_browser`
-
-
 -------
 
 
-A vim plugin to make things in vim clickable.
-
-.. image :: http://i.imgur.com/9T91tLb.gif
 
 Usage
 -----
@@ -84,6 +77,11 @@ Using Vundle or NeoBundle, as always:
 
 Options
 -------
+
+**Options:**
+
+options should be prefixed with `g:clickable_`.
+e.g. `g:clickalbe_browser`
 
 'browser':  'firefox'
     The default url browser.
