@@ -282,7 +282,7 @@ and when you click on it, it will echo 'hello'.
             endif
     endfunction "}}}
 
-you can check 'riv.vim/clickable' for a detail view.
+you can check 'riv.vim/clickable' for a working view.
 
 Maybe a detail intro is needed in the future.
 So anyone can write one in english are welcome.
