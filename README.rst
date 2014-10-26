@@ -230,12 +230,13 @@ and when you click on it, it will echo 'hello'.
     fun! local_confg.test.post_validate() dict "{{{
     endfun "}}}
 
-    " triggering function
+    " triggering functio, should return 1 if triggered.
     function! local_config.test.trigger(...) dict "{{{
         echo 'test'
+        return 1
     endfunction "}}}
 
-    " Highlight function
+    " Highlight function, should return 1 if highlighted
     " Don't change this only if you know what you are doing
     function! local_config.test.highlight(...) dict "{{{
             let HL = get(a:000, 0 , 'IncSearch')
@@ -263,7 +264,7 @@ and when you click on it, it will echo 'hello'.
     endfun "}}}
 
 
-    " Hover function. 
+    " Hover function. should return 1 if highlighted
     " Don't change this only if you know what you are doing
     function! local_config.test.on_hover(...) dict "{{{
             if !empty(self.validate())
