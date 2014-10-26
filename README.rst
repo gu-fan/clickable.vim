@@ -86,11 +86,12 @@ e.g. `g:clickalbe_browser`
 
 'browser':  'firefox'
     The default url browser.
- 
 
 'extensions': 'txt,js,css,html,py,vim,java,jade,c,cpp,rst,php,rb',
     The string with such extension will be considered as file pattern.
-
+ 
+'prefix': '_clickable'
+    used for prefixing syntax group name.
 
 'ignored_buf': '^NERD',
     Clickable Ignored  buffer.
@@ -113,33 +114,182 @@ e.g. `g:clickalbe_browser`
 Defining clickable plugins
 --------------------------
 
-Along with the `g:clickable_directory` directory, clickable.vim will search all vim file under '&rtp/clickable' and source them.
 
-These vim file must use  `clickable#export(object)` to export config object
-to clickable plugin.
 
-e.g. The mail config object::
+Along with the `g:clickable_directory` directory,
+clickable.vim will search all vim file under '&rtp/clickable' and source them.
+
+So you can put your clickable config under 'your_plugin/clickable' directory.
+
+These vim file must use  `clickable#export(object)` to export config queue object to clickable plugin.
+
+**A minimal config for use.**
+
+`your_plugin/clickable/your_plugin.vim`:
+
+.. code:: vim
+
+    function s:init() 
+        
+        " A Class
+        let Class = clickable#class#init() 
+
+        let Basic = clickable#class#basic#init() 
+
+        let config = {}
+        
+        " Create a config object exteding from Basic config object.
+        let config.hello = Class('hello', Basic, {
+        \ 'name': 'hello',
+        \ 'pattern': 'hello'
+        \})
+    
+
+        " The trigger will be called when mapping are typed. 
+        function config.hello.trigger(...) dict 
+            echo 'Hello'
+        endfunction
+
+        call clickable#export(config)
+    endfunction
+
+    call s:init()
+
+
+So this plugin will highlight all 'hello' with 'Underline', 
+and when you click on it, it will echo 'hello'.
+
+
+**A More specific description**
+
+.. code:: vim
 
     let Class = clickable#class#init()
+
+    " Basic Config Object
+    " clickable.vim/autoload/class/basic.vim
     let Basic = clickable#class#basic#init()
+
+    " Syntax Config Object, extened by File and Link
+    " clickable.vim/autoload/class/syntax.vim
+    let Syntax = clickable#class#syntax#init()
+
+    " File Config Object, will open file when triggered.
+    " clickable.vim/autoload/class/file.vim
     let File = clickable#class#file#init()
+
+    " Link Config Object, will browse url when triggered.
+    " clickable.vim/autoload/class/link.vim
     let Link = clickable#class#link#init()
 
     let local_config = {}
 
-    let local_config.mail = Class('Mail',Link, {
-        \ 'name': 'mail',
-        \ 'pattern': '\v<[[:alnum:]_-]+%(\.[[:alnum:]_-]+)*[@#][[:alnum:]]%([[:alnum:]-]*[[:alnum:]]\.)+[[:alnum:]]%([[:alnum:]-]*[[:alnum:]])=>',
-        \ 'tooltip': 'mail:',
+    " exteding the File Config object
+    let local_config.test = Class('Test',File, {
+
+        " config object's name
+        \ 'name': 'test',
+
+        " pattern for string matching
+        \ 'pattern': 'test',
+
+        " tooltip when showing
+        \ 'tooltip': 'test:',
+
+        " syntax group name for highlighting. will be prefixed
+        \ 'syn_group': 'test',
+
+        " syntax pattern seperator used for define pattern.
+        " should not be duplicated with symbol used inside pattern.
+        \ 'syn_sep': '`',
+
+        " Highlight group name. The basic syntax highlighting.
+        \ 'hl_group': 'Underlined',
+
+        " Highlight group for hover.
+        \ 'hover_hl_group': 'MoreMsg',
+
+        " Highlight group for not exists. (used by File)
+        \ 'noexists_hl_group': '',
 
         \})
 
-    function! local_config.mail.trigger(...) dict "{{{
-        let mail = 'mailto:'. self._hl.obj.str
-        let mail = substitute(mail, '#', '@', '')
-        call clickable#util#browse(mail, self.browser)  
+    " validate function.
+    " return 1 if the pattern is valid,
+    " return 0 if not.
+    function! local_config.test.validate(...) dict "{{{
+        return 1
     endfunction "}}}
 
+    " for post validate hook up
+    fun! local_confg.test.post_validate() dict "{{{
+    endfun "}}}
+
+    " triggering function
+    function! local_config.test.trigger(...) dict "{{{
+        echo 'test'
+    endfunction "}}}
+
+    " Highlight function
+    " Don't change this only if you know what you are doing
+    function! local_config.test.highlight(...) dict "{{{
+            let HL = get(a:000, 0 , 'IncSearch')
+            let obj = self._hl.obj
+            if has_key(obj, 'str')  
+                let bgn = obj.bgn + 1
+                let end = obj.end
+                let row = self._hl.row
+                let col = self._hl.col
+        
+                if obj.bgn < col && col <= obj.end + 1
+                    " echon '|' obj.bgn ',' obj.end
+                    " echon ':' col
+                    " echon 'hi'
+                    " echon obj.str
+                    execute '2match' HL.' /\%'.(row)
+                                \.'l\%>'.(bgn-1) .'c\%<'.(end+1).'c/'
+                    return 1
+                " else
+                "     echon '|' obj.bgn ',' obj.end
+                "     echon ':' col
+                "     echon 'no hi'
+                "     echon obj.str
+                endif
+
+            endif
+
+            return 0
+    endfunction "}}}
+
+    " Show Tooltip in cmdline
+    fun! local_config.test.show_tooltip(tooltip) dict "{{{
+        call clickable#echo(a:tooltip)
+    endfun "}}}
+
+
+    " Hover function. 
+    " Don't change this only if you know what you are doing
+    function! local_config.test.on_hover(...) dict "{{{
+            if !empty(self.validate())
+                call self.post_validate()
+                call self.show_tooltip(self.tooltip)
+                return 1
+            else
+                return 0
+            endif
+    endfunction "}}}
+
+    " Click function
+    " Don't change this only if you know what you are doing
+    function! local_config.test.on_click(...) dict "{{{
+            if !empty(self.validate())
+                call self.post_validate()
+                call self.trigger(a:mapping)
+                return 1
+            else
+                return 0
+            endif
+    endfunction "}}}
 
 you can check 'riv.vim/clickable' for a detail view.
 
