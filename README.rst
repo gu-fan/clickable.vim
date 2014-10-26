@@ -145,7 +145,8 @@ put it at ``your_plugin/clickable/your_plugin.vim``:
         " Create a config object exteding from Basic config object.
         let config.hello = Class('hello', Basic, {
         \ 'name': 'hello',
-        \ 'pattern': 'hello'
+        \ 'pattern': 'hello',
+        \ 'hl_group': 'Keyword',
         \})
     
 
@@ -160,7 +161,7 @@ put it at ``your_plugin/clickable/your_plugin.vim``:
     call s:init()
 
 
-So this plugin will highlight all 'hello' with 'Underline', 
+So this plugin will highlight all 'hello' with 'Keyword' group, 
 and when you click on it, it will echo 'hello'.
 
 
