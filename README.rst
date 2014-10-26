@@ -128,7 +128,8 @@ These vim file must use  `clickable#export(object)` to export config queue objec
 put it at ``your_plugin/clickable/your_plugin.vim``:
 
 .. code:: vim
-
+    
+    " Don't pollute the global namespace
     function s:init() 
         
         " A Class
