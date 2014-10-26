@@ -118,9 +118,32 @@ Along with the `g:clickable_directory` directory, clickable.vim will search all 
 These vim file must use  `clickable#export(object)` to export config object
 to clickable plugin.
 
+e.g. The mail config object::
+
+    let Class = clickable#class#init()
+    let Basic = clickable#class#basic#init()
+    let File = clickable#class#file#init()
+    let Link = clickable#class#link#init()
+
+    let local_config = {}
+
+    let local_config.mail = Class('Mail',Link, {
+        \ 'name': 'mail',
+        \ 'pattern': '\v<[[:alnum:]_-]+%(\.[[:alnum:]_-]+)*[@#][[:alnum:]]%([[:alnum:]-]*[[:alnum:]]\.)+[[:alnum:]]%([[:alnum:]-]*[[:alnum:]])=>',
+        \ 'tooltip': 'mail:',
+
+        \})
+
+    function! local_config.mail.trigger(...) dict "{{{
+        let mail = 'mailto:'. self._hl.obj.str
+        let mail = substitute(mail, '#', '@', '')
+        call clickable#util#browse(mail, self.browser)  
+    endfunction "}}}
+
+
 you can check 'riv.vim/clickable' for a detail view.
 
-Maybe a detail intro is needed.
+Maybe a detail intro is needed in the future.
 So anyone can write one in english are welcome.
 
 There is an (Chinese) intro in my blog: http://rykka.me/rewrite_of_clickable.vim.html
