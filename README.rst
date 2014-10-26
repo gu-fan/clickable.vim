@@ -22,6 +22,9 @@ And can be extened easily with your plugins.
 Currently, This project focused on implmenting not performance, so maybe a
 little bit slower.
 
+(In fact, it has been optimized already. 
+And maybe no more optimzation anymore.)
+
 -------
 
 
