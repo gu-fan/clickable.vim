@@ -23,7 +23,7 @@ Currently, This project focused on implmenting not performance, so maybe a
 little bit slower.
 
 (In fact, it has been optimized already. 
-And maybe no more optimzation anymore.)
+And maybe no more further optimzations)
 
 -------
 
