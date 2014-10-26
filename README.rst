@@ -242,18 +242,9 @@ and when you click on it, it will echo 'hello'.
                 let col = self._hl.col
         
                 if obj.bgn < col && col <= obj.end + 1
-                    " echon '|' obj.bgn ',' obj.end
-                    " echon ':' col
-                    " echon 'hi'
-                    " echon obj.str
                     execute '2match' HL.' /\%'.(row)
                                 \.'l\%>'.(bgn-1) .'c\%<'.(end+1).'c/'
                     return 1
-                " else
-                "     echon '|' obj.bgn ',' obj.end
-                "     echon ':' col
-                "     echon 'no hi'
-                "     echon obj.str
                 endif
 
             endif
