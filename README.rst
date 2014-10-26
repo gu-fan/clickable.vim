@@ -125,7 +125,7 @@ These vim file must use  `clickable#export(object)` to export config queue objec
 
 **A minimal config for use.**
 
-`your_plugin/clickable/your_plugin.vim`:
+put it at ``your_plugin/clickable/your_plugin.vim``:
 
 .. code:: vim
 
