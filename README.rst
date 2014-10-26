@@ -14,9 +14,10 @@ A vim plugin to make things in vim clickable.
 What's New in 0.91
 ------------------
 
-I've rewrite the clickable.vim to make it more scalable.
+I've rewrite the clickable.vim to make it more usable.
 
-There is an intro in my blog(Chinese): http://rykka.me/rewrite_of_clickable.vim.html
+It has syntax highlighting, hover function and click function.
+And can be extened easily with your plugins.
 
 Currently, This project focused on implmenting not performance, so maybe a
 little bit slower.
@@ -98,10 +99,12 @@ e.g. `g:clickalbe_browser`
     The mapping to trigger clickable.
 
 'map_fallback': {'<C-CR>':'kJ'}
-    the `map_fallback` option is used for default action
+    The `map_fallback` option is used for default action
     for a mapping, when it's not triggered by the event.
 
-    it can be a function object.  see ':h funcref'.
+    When it's a string, it will be trigger as a mapping.
+
+    Also it can be a function object.  see ':h funcref'.
 
 'directory':  ''
 
@@ -110,16 +113,17 @@ e.g. `g:clickalbe_browser`
 Defining clickable plugins
 --------------------------
 
-
-Along with the `g:clickable_directory` directory, clickable.vim will search all vim file under '&rtp/clickable' and
-source them.
+Along with the `g:clickable_directory` directory, clickable.vim will search all vim file under '&rtp/clickable' and source them.
 
 These vim file must use  `clickable#export(object)` to export config object
 to clickable plugin.
 
 you can check 'riv.vim/clickable' for a detail view.
 
+Maybe a detail intro is needed.
+So anyone can write one in english are welcome.
 
+There is an (Chinese) intro in my blog: http://rykka.me/rewrite_of_clickable.vim.html
 
 
 Q & A

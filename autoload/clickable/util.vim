@@ -94,7 +94,7 @@ fun! clickable#util#fallback(mapping) "{{{
     let m = substitute(m,
                 \ '\[\([-0-9a-zA-Z]\+\)\]',
                 \ '<\1>','g')
-    let s:fbk = g:clickable_map_fallback
+    let s:fbk = clickable#get_opt('map_fallback')
     if exists('s:fbk[m]')
         if type(s:fbk[m]) == type(function('tr'))
             call call(s:fbk[m], [])

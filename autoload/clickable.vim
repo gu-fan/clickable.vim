@@ -17,7 +17,8 @@ let s:default.options = {
             \'extensions': 'txt,js,css,html,py,vim,java,jade,c,cpp,rst,php,rb',
             \'prefix': '_clickable_',
             \'ignored_buf': '^NERD',
-            \'maps': '<2-LeftMouse>,<C-2-LeftMouse>,<S-2-LeftMouse>,<CR>,<C-CR>,<S-CR>,<C-S-CR>'
+            \'maps': '<2-LeftMouse>,<C-2-LeftMouse>,<S-2-LeftMouse>,<CR>,<C-CR>,<S-CR>,<C-S-CR>',
+            \'map_fallback': {'<C-CR>':'kJ'}
             \ }
 
 fun! s:trim(t) "{{{
