@@ -9,6 +9,9 @@ clickable.vim
 
 Make things clickable, even in vim.
 
+
+An old image but shows how it works.
+
 .. image :: http://i.imgur.com/9T91tLb.gif
 
 What's New in 0.91
@@ -17,17 +20,10 @@ What's New in 0.91
 I've rewrite the clickable.vim to make it more usable.
 
 It has syntax highlighting, hover function and click function.
-And can be extened easily with your plugins.
 
-Currently, This project focused on implmenting not performance, so maybe a
-little bit slower.
-
-(In fact, it has been optimized already. 
-And maybe no more further optimzations)
-
+And can be easily extened.
 
 -------
-
 
 
 Usage
@@ -75,7 +71,6 @@ Like bundle: clicking the 'Bundle "xxx/xxx"' will jump to the bundle directory d
 see clickable-things_.
 
 Also you can define your own clickable things easily.
-
 
 Install
 -------
