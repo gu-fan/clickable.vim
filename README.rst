@@ -81,14 +81,13 @@ Install
 Using Vundle or NeoBundle, as always:
 
     ``Bundle "Rykka/clickable.vim"`` 
+    ``Bundle "Rykka/clickable-things"`` 
     ``Bundle "Rykka/os.vim"`` 
 
-    or
+    or ``NeoBundle``
 
-    ``NeoBundle "Rykka/clickable.vim"``
-    ``NeoBundle "Rykka/os.vim"`` 
-
-
+the os.vim may migrate to vital.vim sooner or later.
+but for now, just keep it there.
 
 Options
 -------
