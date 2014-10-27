@@ -7,7 +7,7 @@ clickable.vim
 
 :version: 0.91 beta
 
-A vim plugin to make things in vim clickable.
+Make things clickable, even in vim.
 
 .. image :: http://i.imgur.com/9T91tLb.gif
 
@@ -70,7 +70,9 @@ By default, folding/links/files are made clickable:
 You can add 'rykka/clickable-things' to your bundle to include more clickable
 things.
 
-like bundle or other things. see clickable-things_
+Like bundle: clicking the 'Bundle "xxx/xxx"' will jump to the bundle directory directly.
+
+see clickable-things_.
 
 Also you can define your own clickable things easily.
 
@@ -78,13 +80,13 @@ Also you can define your own clickable things easily.
 Install
 -------
 
-Using Vundle or NeoBundle, as always:
+Using Vundle or NeoBundle, as always::
 
-    ``Bundle "Rykka/clickable.vim"`` 
-    ``Bundle "Rykka/clickable-things"`` 
-    ``Bundle "Rykka/os.vim"`` 
+    Bundle "Rykka/clickable.vim"
+    Bundle "Rykka/clickable-things"
+    Bundle "Rykka/os.vim"
 
-    or ``NeoBundle``
+or ``NeoBundle``
 
 the os.vim may migrate to vital.vim sooner or later.
 but for now, just keep it there.
