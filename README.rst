@@ -174,7 +174,7 @@ put it at ``your_plugin/clickable/your_plugin.vim``:
         endfunction
 
         let config = {'hello': hello}
-        call clickable#export({})
+        call clickable#export(config)
     endfunction
 
     call s:init()
@@ -183,6 +183,7 @@ put it at ``your_plugin/clickable/your_plugin.vim``:
 So this plugin will highlight all 'hello' with 'Keyword' group, 
 and when you click on it, it will echo 'hello'.
 
+----
 
 **A More Specific Description**
 
@@ -326,18 +327,23 @@ and when you click on it, it will echo 'hello'.
 
 You can check clickable-things_ for working examples.
 
+
 Maybe a detail intro is needed in the future.
 So anyone can write one in english are welcome.
 
 There is an (Chinese) intro in my blog: http://rykka.me/rewrite_of_clickable.vim.html
 
 
-Q & A
+Issues
 -----
+
+Please post issues at Github.
 
 1. Not HighLight with cursor hover.
    
-   A: The matching is using '2match', 
+   The matching is using '2match', 
    So may be conflicted with other highlighting plugins.
+
+
 
 .. _clickable-things: https://github.com/Rykka/clickable-things
