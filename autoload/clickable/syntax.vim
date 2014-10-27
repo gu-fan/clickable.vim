@@ -19,11 +19,11 @@ fun! s:syn.syn_match(pattern) dict "{{{
     " echom self.syn_group
     " NOTE: Syntax seperator for wrapping syntax pattern.
     let s = exists("self.syn_sep") ? self.syn_sep : '`'
-    if empty(self.contained_in)
+    if empty(self.syn_args)
         " echom 1
         " echom "syn match ".self.syn_group." `". a:pattern ."` "
                     " \." containedin=.* "
-                    " \."containedin=ALLBUT,".g:clickable_prefix.'.*'
+                    " \."containedin=ALLBUT, ".g:clickable_prefix.'.*'
 
         exe "syn match ".self.syn_group." ".s. a:pattern .s
                     " \." containedin=.* "
@@ -31,7 +31,7 @@ fun! s:syn.syn_match(pattern) dict "{{{
     else
         " echom 2
         exe "syn match ".self.syn_group." ".s. a:pattern .s
-                    \." containedin=" . self.contained_in
+                    \. " ".self.syn_args
     endif
 endfun "}}}
 " Attach the  syn/hi to link

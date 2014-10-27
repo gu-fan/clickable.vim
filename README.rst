@@ -1,4 +1,4 @@
-Clickable.vim
+clickable.vim
 =============
     
     Make Things Clickable : ) 
@@ -93,8 +93,6 @@ e.g. `g:clickalbe_browser`
 'extensions': 'txt,js,css,html,py,vim,java,jade,c,cpp,rst,php,rb',
     The string with such extension will be considered as file pattern.
  
-'prefix': '_clickable'
-    used for prefixing syntax group name.
 
 'ignored_buf': '^NERD',
     Clickable Ignored  buffer.
@@ -114,6 +112,10 @@ e.g. `g:clickalbe_browser`
 
     The 'clickable' plugin  directory.
 
+'prefix': '_clickable'
+    used for prefixing syntax group name. Change this only if there is a syntax name
+    conflict, which should never happen though.
+
 Defining clickable plugins
 --------------------------
 
@@ -125,6 +127,15 @@ clickable.vim will search all vim file under '&rtp/clickable' and source them.
 So you can put your clickable config under 'your_plugin/clickable' directory.
 
 These vim file must use  `clickable#export(object)` to export config queue object to clickable plugin.
+
+
+NOTE: 
+
+When things not highlighted/hovered/triggered.
+
+You should know that the Syntax Object's validation is based on the syntax item. 
+So make sure it's correctly syntax matched with your pattern.
+
 
 **A minimal config for use.**
 
@@ -210,6 +221,13 @@ and when you click on it, it will echo 'hello'.
         " syntax pattern seperator used for define pattern
         " should not be duplicated with symbol used inside pattern
         \ 'syn_sep': '`',
+
+        " Additional syntax arguments.
+        " when empty it will be set to 'containedin=ALLBUT,_clickable.*'
+        " If you want to make your pattern doesn't have visual effect.
+        " You can use 'containedin=.* transparent'
+        " See ':h syn-arguments' for details
+        \ 'syn_args': '',
 
         " Highlight group name. The basic syntax highlighting
         \ 'hl_group': 'Underlined',

@@ -20,7 +20,7 @@ fun! clickable#class#syntax#init() "{{{
         let Syntax.hl_group = 'Underlined'
         let Syntax.hover_hl_group = 'MoreMsg'
         let Syntax.noexists_hl_group = ''
-        let Syntax.contained_in = ''
+        let Syntax.syn_args= ''
         " XXX
         " we can not simply use this as we should init 
         " for every window/buffer
