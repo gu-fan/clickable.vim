@@ -65,9 +65,14 @@ By default, folding/links/files are made clickable:
     Whilst ``Shift`` means split,
     And ``Control`` means create nonexists without confirm.
 
+**And More Clickable Things**
 
 You can add 'rykka/clickable-things' to your bundle to include more clickable
 things.
+
+like bundle or other things. see clickable-things_
+
+Also you can define your own clickable things easily.
 
 
 Install
@@ -186,7 +191,7 @@ So this plugin will highlight all 'hello' with 'Keyword' group,
 and when you click on it, it will echo 'hello'.
 
 
-**A More specific description**
+**A More Specific Description**
 
 .. code:: vim
 
@@ -318,8 +323,15 @@ and when you click on it, it will echo 'hello'.
                 return 0
             endif
     endfunction "}}}
+   
+    " for file object only.
+    " return 1 if exists
+    fun! local_config.test.is_file_exists() dict "{{{
+        return isdirectory(self.full_path) || filereadable(self.full_path) 
+    endfun "}}}
 
-you can check 'riv.vim/clickable' for a working view.
+
+You can check clickable-things_ for working examples.
 
 Maybe a detail intro is needed in the future.
 So anyone can write one in english are welcome.
@@ -334,3 +346,5 @@ Q & A
    
    A: The matching is using '2match', 
    So may be conflicted with other highlighting plugins.
+
+.. _clickable-things: https://github.com/Rykka/clickable-things
