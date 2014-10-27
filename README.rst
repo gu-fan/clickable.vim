@@ -198,8 +198,8 @@ and when you click on it, it will echo 'hello'.
         " pattern for string matching
         \ 'pattern': 'test',
 
-        " only valid when filetype is vim
-        \ 'filetype': 'vim',
+        " Valid when filetype is vim or html
+        \ 'filetype': 'vim,html',
 
         " tooltip when showing
         \ 'tooltip': 'test:',
