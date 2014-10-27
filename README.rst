@@ -118,7 +118,6 @@ You can get it's value by ``clickable#get_opt('browser')``
     When it's function object, it will be called. (see ':h funcref')
 
 'directory':  ''
-
     The Additional 'clickable' plugin directory, to store your own items.
 
 'prefix': '_clickable'
