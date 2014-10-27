@@ -89,42 +89,40 @@ but for now, just keep it there.
 Options
 -------
 
-**Options:**
-
-options will be prefixed with ``g:clickable_``.
+Options will be prefixed with ``g:clickable_``.
 
 e.g.:
 
-you can set 'browser' options by ``g:clickable_browser``
-you can get it's value by ``clickable#get_opt('browser')``
+You can set 'browser' options by ``g:clickable_browser``
+
+You can get it's value by ``clickable#get_opt('browser')``
 
 'browser':  'firefox'
-    The default url browser.
+    For Links, The default url browser.
 
 'extensions': 'txt,js,css,html,py,vim,java,jade,c,cpp,rst,php,rb',
-    The string with such extension will be considered as file pattern.
+    For Files, Strings with such extension will be considered as a file.
  
 
 'ignored_buf': '^NERD',
-    Clickable Ignored  buffer.
+    The buffer name matched will be ignored by clickable.vim
 
 'maps': '<2-LeftMouse>,<C-2-LeftMouse>,<S-2-LeftMouse>,<CR>,<C-CR>,<S-CR>,<C-S-CR>'
-    The mapping to trigger clickable.
+    The mapping to trigger clickable 'click' action.
 
 'map_fallback': {'<C-CR>':'kJ'}
-    The `map_fallback` option is used for default action
-    for a mapping, when it's not triggering anything.
+    Default action when a 'click' action does not trigger any clickable item.
 
-    When it's a string, it will be trigger as a mapping.
+    When it's a string, it will be triggered as a mapping.
 
-    Also it can be a function object.  see ':h funcref'.
+    When it's function object, it will be called. (see ':h funcref')
 
 'directory':  ''
 
-    The 'clickable' plugin  directory.
+    The Additional 'clickable' plugin directory, to store your own items.
 
 'prefix': '_clickable'
-    used for prefixing syntax group name. Change this only if there is a syntax name
+    Used for prefixing syntax group name. Change this only if there is a syntax name
     conflict, which should never happen though.
 
 Defining clickable plugins
@@ -140,7 +138,7 @@ So you can put your clickable config under 'your_plugin/clickable' directory.
 These vim file must use  `clickable#export(object)` to export config queue object to clickable plugin.
 
 
-NOTE: 
+NOTE:  Syntax Match First.
 
 When things not highlighted/hovered/triggered.
 
