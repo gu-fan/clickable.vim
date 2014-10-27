@@ -344,6 +344,10 @@ Please post issues at Github.
    The matching is using '2match', 
    So may be conflicted with other highlighting plugins.
 
+2. First highlighted and worked, after sometime stopped working.
 
+   This is because buffer's syntax group or au group are cleand or something.
+
+   You can use ':bw' to wipe out the buffer and reedit it.
 
 .. _clickable-things: https://github.com/Rykka/clickable-things
