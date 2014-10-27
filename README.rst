@@ -346,7 +346,7 @@ Please post issues at Github.
 
 2. First highlighted and worked, after sometime stopped working.
 
-   This is because buffer's syntax group or au group are cleand or something.
+   This is because buffer's syntax group or au group are cleand by something.
 
    You can use ':bw' to wipe out the buffer and reedit it.
 
