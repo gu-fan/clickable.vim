@@ -25,6 +25,7 @@ little bit slower.
 (In fact, it has been optimized already. 
 And maybe no more further optimzations)
 
+
 -------
 
 
@@ -57,12 +58,17 @@ By default, folding/links/files are made clickable:
 
     
 
-You can use ``<2-leftmouse>`` or ``<CR>`` to open them.
+    You can use ``<2-leftmouse>`` or ``<CR>`` to open them.
 
-Combine with ``Shift`` and ``Control`` can also be used.
+    Combine with ``Shift`` and ``Control`` can also be used.
 
-Whilst ``Shift`` means split,
-And ``Control`` means create nonexists without confirm.
+    Whilst ``Shift`` means split,
+    And ``Control`` means create nonexists without confirm.
+
+
+You can add 'rykka/clickable-things' to your bundle to include more clickable
+things.
+
 
 Install
 -------
@@ -84,8 +90,12 @@ Options
 
 **Options:**
 
-options should be prefixed with `g:clickable_`.
-e.g. `g:clickalbe_browser`
+options will be prefixed with ``g:clickable_``.
+
+e.g.:
+
+you can set 'browser' options by ``g:clickable_browser``
+you can get it's value by ``clickable#get_opt('browser')``
 
 'browser':  'firefox'
     The default url browser.
