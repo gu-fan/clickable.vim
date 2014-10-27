@@ -165,10 +165,9 @@ put it at ``your_plugin/clickable/your_plugin.vim``:
 
         let Basic = clickable#class#basic#init() 
 
-        let config = {}
         
         " Create a config object exteding from Basic config object.
-        let config.hello = Class('hello', Basic, {
+        let hello = Class('hello', Basic, {
         \ 'name': 'hello',
         \ 'pattern': 'hello',
         \ 'hl_group': 'Keyword',
@@ -176,11 +175,12 @@ put it at ``your_plugin/clickable/your_plugin.vim``:
     
 
         " The trigger will be called when mapping are typed. 
-        function config.hello.trigger(...) dict 
+        function hello.trigger(...) dict 
             echo 'Hello'
         endfunction
 
-        call clickable#export(config)
+        let config = {'hello': hello}
+        call clickable#export({})
     endfunction
 
     call s:init()
