@@ -129,23 +129,22 @@ Defining clickable plugins
 
 For now, you can defining clickable plugin with your need.
 
-Along with the `g:clickable_directory` directory,
 clickable.vim will search all vim file under '&rtp/clickable' and source them.
-
-So you can put your clickable config under 'your_plugin/clickable' directory.
+Along with the `g:clickable_directory` directory,
 
 These vim file must use  `clickable#export(object)` to export config queue object to clickable plugin.
 
 
-NOTE:  Syntax Match First.
+:NOTE:  **Syntax Match First.**
 
-When things not highlighted/hovered/triggered.
+        For clickable objects with syntax, validation are based on syntax highlight. 
 
-You should know that the Syntax Object's validation is based on the syntax item. 
-So make sure it's correctly syntax matched with your pattern.
+        When things not highlighted/hovered/triggered, It will be not validated.
+
+        So make sure it's correctly syntax matched with your pattern.
 
 
-**A minimal config for use.**
+**A minimal config for useage**
 
 put it at ``your_plugin/clickable/your_plugin.vim``:
 
@@ -154,12 +153,12 @@ put it at ``your_plugin/clickable/your_plugin.vim``:
     " Don't pollute the global namespace
     function s:init() 
         
-        " A Class
+        " Class
         let Class = clickable#class#init() 
 
+        " A Basic Config Class
         let Basic = clickable#class#basic#init() 
 
-        
         " Create a config object exteding from Basic config object.
         let hello = Class('hello', Basic, {
         \ 'name': 'hello',
@@ -318,12 +317,14 @@ and when you click on it, it will echo 'hello'.
             endif
     endfunction "}}}
    
-    " for file object only.
+    " For file object only.
+    " The self.full_path are used as file's real path.
+    " You can generate it in self.post_validate()
     " return 1 if exists
     fun! local_config.test.is_file_exists() dict "{{{
         return isdirectory(self.full_path) || filereadable(self.full_path) 
     endfun "}}}
-
+   
 
 You can check clickable-things_ for working examples.
 
@@ -349,5 +350,10 @@ Please post issues at Github.
    This is because buffer's syntax group or au group are cleand by something.
 
    You can use ':bw' to wipe out the buffer and reedit it.
+
+3. The Syntax highlighting of the file are changed.
+
+   You can set 'syn_args' to 'containedin=.* transparent'
+   to make clickable object transparent of highlighting
 
 .. _clickable-things: https://github.com/Rykka/clickable-things
