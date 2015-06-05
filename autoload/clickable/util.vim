@@ -13,6 +13,13 @@ let s:V = vital#of('clickable_vim')
 let s:File = s:V.import('System.File')
 
 
+let s:is_unix = has('unix')
+let s:is_windows = has('win16') || has('win32') || has('win64') || has('win95')
+let s:is_cygwin = has('win32unix')
+let s:is_mac = !s:is_windows && !s:is_cygwin
+      \ && (has('mac') || has('macunix') || has('gui_macvim') ||
+      \   (!isdirectory('/proc') && executable('sw_vers')))
+
 fun! clickable#util#open(...)
     return call(s:File.open , a:000 , s:File)
 endfun
@@ -118,17 +125,10 @@ fun! clickable#util#clear_highlight() "{{{
 endfun "}}}
 
 fun! clickable#util#browse(url, ...) "{{{
-    if !exists("s:os")
-        if !exists("*os#init")
-            call clickable#error(" os#init is needed, please install bundle 'rykka/os.vim' ")
-        else
-            let s:os = os#init()
-        endif
-    endif
     let url = a:url
     " let url = url =~? '\v^%(https=|file|ftp|fap|gopher|mailto|news):' ? url : 'http://'. url
     let browser = get(a:000, 0, clickable#get_opt('browser'))
-    if s:os.is_mac
+    if s:is_mac
         let browser = substitute(browser, '\<\w', '\U\0','g')
         let cmd = 'open -a "'. browser .'"'. ' "'. url .'" &'
     else
