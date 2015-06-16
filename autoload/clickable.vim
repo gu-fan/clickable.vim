@@ -12,7 +12,7 @@
 let g:clickable_version = '0.9.1'
 let s:default = {'version': g:clickable_version}
 let s:default.options = {
-            \'browser':  'firefox',
+            \'browser':  '',
             \'directory':  '',
             \'extensions': 'txt,js,css,html,py,vim,java,jade,c,cpp,rst,php,rb',
             \'prefix': '_clickable_',
