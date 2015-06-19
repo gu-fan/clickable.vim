@@ -94,7 +94,7 @@ You can set 'browser' options by ``g:clickable_browser``
 You can get it's value by ``clickable#get_opt('browser')``
 
 'browser':  'firefox'
-    For Links, The default url browser.
+    For Links, The default url browser. Defaults to nothing (uses system default)
 
 'extensions': 'txt,js,css,html,py,vim,java,jade,c,cpp,rst,php,rb',
     For Files, Strings with such extension will be considered as a file.

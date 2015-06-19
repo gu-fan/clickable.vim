@@ -130,7 +130,7 @@ fun! clickable#util#browse(url, ...) "{{{
     let browser = get(a:000, 0, clickable#get_opt('browser'))
     if s:is_mac
         let browser = substitute(browser, '\<\w', '\U\0','g')
-        let cmd = 'open -a "'. browser .'"'. ' "'. url .'" &'
+        let cmd = 'open ' . ( browser ? '-a "'. browser .'"' : ''). ' "'. url .'" &'
     else
         let cmd = browser. ' ' . url. ' &'
     endif
