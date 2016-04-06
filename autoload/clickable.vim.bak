@@ -297,7 +297,7 @@ fun! clickable#do(action) "{{{
         if a:action =~? '<s-\|-s-\|Shift' | split | endif
         call s:open_file(s:click_text) | return
     elseif s:is_clickable == 'file_nonexists' && g:clickable_confirm_creation == 1
-        if input("'".s:click_text."' is not exists, create it? (yes/no):") == "yes"
+        if input("'".s:click_text."' does not exist, create it? (yes/no): ") == "yes"
             call s:auto_mkdir(s:click_text)
             call s:open_file(s:click_text) 
         endif
